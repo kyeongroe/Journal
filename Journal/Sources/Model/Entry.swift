@@ -28,12 +28,15 @@ class Entry {
         self.updated_dt = Date()
     }
     
-    func update() {
+    func update(contents: String) {
+        self.contents = contents
         
+        self.updated_dt = Date()
+        //sync or store
     }
     
     func destroy() {
-        
+        //sync or delete
     }
     
     func viewInFullScreen() {
