@@ -10,7 +10,7 @@ import Foundation
 
 class Entry {
     
-    var id: String
+    let id: String
     var title: String
     var contents: String
     var creator: String = "Cool Roe"
