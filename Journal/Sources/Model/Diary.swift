@@ -9,11 +9,7 @@
 import Foundation
 
 protocol Diary {
-    func showList() {
-        //get list of entry
-        //entry.viewInList()
-        //specific entry click event showDetail()
-    }
+    func showList()
     
     func showDetail(Entry entry)
     
