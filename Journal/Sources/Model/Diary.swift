@@ -15,25 +15,13 @@ protocol Diary {
         //specific entry click event showDetail()
     }
     
-    func showDetail(Entry entry) {
-        //get a entry
-        //entry.viewInFullScreen()
-    }
+    func showDetail(Entry entry)
     
-    func showDetailForModifying() {
-        //entry.update()
-        //go showDetail
-    }
+    func showDetailForModifying()
     
-    func destroyEntry() {
-        //entry.destroy()
-    }
+    func destroyEntry()   
     
-    func showEmptyDetail() {
-        //Entry()
-    }
+    func showEmptyDetail()
     
-    func saveEntry() {
-        //Entry(title, contents)
-    }
+    func saveEntry()
 }
