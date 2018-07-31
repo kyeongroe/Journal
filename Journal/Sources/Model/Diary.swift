@@ -7,33 +7,35 @@
 //
 
 import Foundation
-
-protocol Diary {
-    func showList() {
-        //get list of entry
-        //entry.viewInList()
-        //specific entry click event showDetail()
-    }
-    
-    func showDetail(Entry entry) {
-        //get a entry
-        //entry.viewInFullScreen()
-    }
-    
-    func showDetailForModifying() {
-        //entry.update()
-        //go showDetail
-    }
-    
-    func destroyEntry() {
-        //entry.destroy()
-    }
-    
-    func showEmptyDetail() {
-        //Entry()
-    }
-    
-    func saveEntry() {
-        //Entry(title, contents)
-    }
-}
+//
+//protocol Diary {
+//    var entryList: Entry = []
+//
+//    func showRecentEntryList(max: Int) -> [Entry]{
+//        //get list of entry
+//        //entry.viewInList()
+//        //specific entry click event showDetail()
+//    }
+//
+//    func showDetail(Entry entry) {
+//        //get a entry
+//        //entry.viewInFullScreen()
+//    }
+//
+//    func showDetailForModifying() {
+//        //entry.update()
+//        //go showDetail
+//    }
+//    
+//    func destroyEntry() {
+//        //entry.destroy()
+//    }
+//
+//    func showEmptyDetail() {
+//        //Entry()
+//    }
+//
+//    func saveEntry() {
+//        //Entry(title, contents)
+//    }
+//}
