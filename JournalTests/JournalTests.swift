@@ -8,47 +8,7 @@
 
 import XCTest
 
-
-class Entry {
-    
-    var id: String
-    var title: String
-    var contents: String
-    var creator: String = "Cool Roe"
-    
-    let created_dt: Date
-    var updated_dt: Date
-    var deleted_dt: Date?
-    
-    init(title: String, contents: String) {
-        self.id = "using uniqueid generator"
-        self.title = title
-        self.contents = contents
-        
-        self.created_dt = Date()
-        self.updated_dt = Date()
-    }
-    
-    func update(contents: String) {
-        self.contents = contents
-        
-        self.updated_dt = Date()
-        //sync or store
-    }
-    
-    func destroy() {
-        //sync or delete
-    }
-    
-    func viewInFullScreen() {
-        
-    }
-    
-    func viewInList() {
-        
-    }
-}
-
+@testable import Journal
 
 class JournalTests: XCTestCase {
     
