@@ -10,40 +10,23 @@ import Foundation
 
 class Entry {
     
-    let id: String
-    var title: String
-    var contents: String
-    var creator: String = "Cool Roe"
+    let id: Int
+    let createdAt: Date
+    var text: String
     
-    let created_dt: Date
-    var updated_dt: Date
-    var deleted_dt: Date?
-    
-    init(title: String, contents: String) {
-        self.id = "using uniqueid generator"
-        self.title = title
-        self.contents = contents
-        
-        self.created_dt = Date()
-        self.updated_dt = Date()
+    init(id: Int, createdAt: Date, text: String) {
+        self.id = id
+        self.createdAt = createdAt
+        self.text = text
     }
-    
-    func update(contents: String) {
-        self.contents = contents
-        
-        self.updated_dt = Date()
-        //sync or store
-    }
-    
-    func destroy() {
-        //sync or delete
-    }
-    
-    func viewInFullScreen() {
-        
-    }
-    
-    func viewInList() {
-        
+}
+
+extension Entry: Identifiable { }
+
+extension Entry: Equatable {
+    static func ==(lhs: Entry, rhs: Entry) -> Bool {
+        return lhs.id == rhs.id
+            && lhs.createdAt == rhs.createdAt
+            && lhs.text == rhs.text
     }
 }

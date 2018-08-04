@@ -30,12 +30,12 @@ class JournalTests: XCTestCase {
     
     func testEditEntryText() {
         //setup
-        let entry = Entry(title: "첫 번째 일기 제목", contents: "첫 번째 일기")
+        let entry = Entry(id: 1, createdAt: Date(), text: "일기")
         
         //run
-        entry.contents = "첫 번째 테스트"
+        entry.text = "첫 번째 테스트"
         // Verify
-        XCTAssertEqual(entry.contents, "첫 번째 테스트")
+        XCTAssertEqual(entry.text, "첫 번째 테스트")
     }
     
     func testPerformanceExample() {
@@ -45,4 +45,41 @@ class JournalTests: XCTestCase {
         }
     }
     
+    func testAddEntryToJournal() {
+        // Setup
+        let journal = InMemoryJournal()
+        let newEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        // Run
+        journal.add(newEntry)
+        // Verify
+        let entryInJournal: Entry? = journal.entry(with: 1)
+        XCTAssertEqual(entryInJournal, .some(newEntry))
+        XCTAssertTrue(entryInJournal === newEntry)
+        XCTAssertTrue(entryInJournal?.isIdentical(to: newEntry) == true)
+    }
+    
+    func testGetEntryWithId() {
+        // Setup
+        let oldEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let journal = InMemoryJournal(entries: [oldEntry])
+        // Run
+        let entry = journal.entry(with: 1)
+        // Verify
+        XCTAssertEqual(entry, .some(oldEntry))
+        XCTAssertTrue(entry?.isIdentical(to: oldEntry) == true)
+    }
+    
+    func testUpdateEntry() {
+        // Setup
+        let oldEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let journal = InMemoryJournal(entries: [oldEntry])
+        // Run
+        oldEntry.text = "일기 내용을 수정했습니다"
+        journal.update(oldEntry)
+        // Verify
+        let entry = journal.entry(with: 1)
+        XCTAssertEqual(entry, .some(oldEntry))
+        XCTAssertTrue(entry?.isIdentical(to: oldEntry) == true)
+        XCTAssertEqual(entry?.text, .some("일기 내용을 수정했습니다"))
+    }
 }
