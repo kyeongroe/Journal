@@ -11,7 +11,6 @@ import Foundation
 protocol Identifiable {
     var id: Int { get }
 }
-
 extension Identifiable {
     func isIdentical(to other: Self) -> Bool {
         return id == other.id
