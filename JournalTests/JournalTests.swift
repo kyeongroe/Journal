@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Nimble
 
 @testable import Journal
 
@@ -29,13 +30,12 @@ class JournalTests: XCTestCase {
     }
     
     func testEditEntryText() {
-        //setup
-        let entry = Entry(id: 1, createdAt: Date(), text: "일기")
-        
-        //run
+        // Setup
+        // Nimble
+        let entry = Entry(id: 0, createdAt: Date(), text: "첫 번째 일기") // Run
         entry.text = "첫 번째 테스트"
         // Verify
-        XCTAssertEqual(entry.text, "첫 번째 테스트")
+        expect(entry.text).to(equal("첫 번째 테스트"))
     }
     
     func testPerformanceExample() {
@@ -131,4 +131,5 @@ class JournalTests: XCTestCase {
         XCTAssertEqual(entries.count, 3)
         XCTAssertEqual(entries, [today, yesterDay, dayBeforeYesterday])
     }
+    
 }

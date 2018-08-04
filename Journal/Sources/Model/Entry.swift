@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Entry {
+class Entry: EntryType {
     
     let id: Int
     let createdAt: Date
