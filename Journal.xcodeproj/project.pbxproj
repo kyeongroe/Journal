@@ -15,7 +15,6 @@
 		C0F646CE2102F1790098A8ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0F646CD2102F1790098A8ED /* Assets.xcassets */; };
 		C0F646D12102F1790098A8ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C0F646CF2102F1790098A8ED /* LaunchScreen.storyboard */; };
 		C0FAA991210C4B8700CCD915 /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FAA990210C4B8700CCD915 /* Entry.swift */; };
-		C0FAA993210C519600CCD915 /* Diary.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FAA992210C519600CCD915 /* Diary.swift */; };
 		C0FAA99B210C57CC00CCD915 /* JournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FAA99A210C57CC00CCD915 /* JournalTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,7 +39,6 @@
 		C0F646D02102F1790098A8ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C0F646D22102F1790098A8ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C0FAA990210C4B8700CCD915 /* Entry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
-		C0FAA992210C519600CCD915 /* Diary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diary.swift; sourceTree = "<group>"; };
 		C0FAA998210C57CB00CCD915 /* JournalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JournalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0FAA99A210C57CC00CCD915 /* JournalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalTests.swift; sourceTree = "<group>"; };
 		C0FAA99C210C57CC00CCD915 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -140,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				C0FAA990210C4B8700CCD915 /* Entry.swift */,
-				C0FAA992210C519600CCD915 /* Diary.swift */,
 				C024586A21153C590092E9BE /* Journal.swift */,
 				C024586C211540A50092E9BE /* Identifiable.swift */,
 			);
@@ -262,7 +259,6 @@
 				C024586B21153C590092E9BE /* Journal.swift in Sources */,
 				C0F646C92102F1760098A8ED /* ViewController.swift in Sources */,
 				C0F646C72102F1760098A8ED /* AppDelegate.swift in Sources */,
-				C0FAA993210C519600CCD915 /* Diary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
