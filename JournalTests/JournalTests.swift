@@ -26,7 +26,7 @@ class JournalTests: XCTestCase {
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-//        XCTFail("test fail")
+        //        XCTFail("test fail")
     }
     
     func testEditEntryText() {
