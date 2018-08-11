@@ -28,5 +28,5 @@ extension UIColor {
         return .init(red: 0.109, green: 0.110, blue: 0.188, alpha: 1.0)
     }
     static var gradientEnd: UIColor {
-        return .init(red: 0.203, green: 0.340, blue: 0.474, alpha: 1.0)
+        return .init(red: 0.203, green: 0.340, blue: 0.474, alpha: 0.5)
     } }
