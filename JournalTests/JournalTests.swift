@@ -53,6 +53,7 @@ class JournalTests: XCTestCase {
         journal.add(newEntry)
         // Verify
         let entryInJournal: Entry? = journal.entry(with: 1)
+        expect(entryInJournal) == newEntry
         expect(entryInJournal).to(equal(newEntry))
         expect(entryInJournal?.isIdentical(to: newEntry)).to(equal(true))
     }

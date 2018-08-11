@@ -21,9 +21,7 @@ class Entry: EntryType {
     }
 }
 
-extension Entry: Identifiable { }
-
-extension Entry: Equatable {
+extension Entry {
     static func == (lhs: Entry, rhs: Entry) -> Bool {
         return lhs.id == rhs.id
             && lhs.createdAt == rhs.createdAt

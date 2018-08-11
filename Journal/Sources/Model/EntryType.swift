@@ -8,8 +8,8 @@
 
 import Foundation
 
-protocol EntryType {
+protocol EntryType: Identifiable, Equatable {
     var id: Int { get }
     var createdAt: Date { get }
-    var text: String { get }
+    var text: String { get set }
 }
