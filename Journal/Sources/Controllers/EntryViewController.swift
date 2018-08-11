@@ -24,7 +24,7 @@ class EntryViewController: UIViewController {
     
     private var textView: UITextView!
     
-    private let journal: Journal = InMemoryJournal()
+    var environment: Environment!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -86,10 +86,10 @@ class EntryViewController: UIViewController {
     @objc func saveEntry(_ sender: Any) {
         if let oldEntry = self.editingEntry {
             oldEntry.text = self.textView.text
-            journal.update(oldEntry)
+            environment.entryRepository.update(oldEntry)
         } else {
             let newEntry: Entry = Entry(text: self.textView.text)
-            journal.add(newEntry)
+            environment.entryRepository.add(newEntry)
             editingEntry = newEntry
         }
         
@@ -98,73 +98,6 @@ class EntryViewController: UIViewController {
     
     @objc func editEntry(_ sender: Any) {
         updateSubView(for: true)
-    }
-    
-    func deprecatedviewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        let titleConfigSubview = UIView()
-        
-        titleConfigSubview.backgroundColor = .yellow
-        
-        view.addSubview(titleConfigSubview)
-
-        titleConfigSubview.snp.makeConstraints {
-            $0.height.equalTo(100)
-            $0.top.leading.trailing.equalToSuperview()
-        }
-        
-        let labelOfCreateAt = UILabel()
-        
-        labelOfCreateAt.text = "2018.08.04"
-        labelOfCreateAt.font  = labelOfCreateAt.font.withSize(15)
-        
-        titleConfigSubview.addSubview(labelOfCreateAt)
-        
-        labelOfCreateAt.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(10)
-            $0.bottom.equalToSuperview().offset(-10)
-        }
-        
-        let btnForSaving = UIButton()
-        
-        btnForSaving.setTitle("저장", for: .normal)
-        btnForSaving.setTitleColor(.black, for: .normal)
-        
-//        btnForSaving.addTarget(self, action: #selector(self.pressed(_:)), forControlEvents: .TouchUpInside)
-        
-        titleConfigSubview.addSubview(btnForSaving)
-        
-        btnForSaving.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-10)
-            $0.bottom.equalToSuperview().offset(-10)
-        }
-        
-        let contentSubview = UIView()
-        
-        contentSubview.backgroundColor = .blue
-        
-        view.addSubview(contentSubview)
-        
-        contentSubview.snp.makeConstraints {
-            $0.top.equalTo(titleConfigSubview.snp.bottom)
-            $0.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-        }
-        
-        let contentTextSubview = UITextView()
-        
-        contentTextSubview.backgroundColor = .gray
-
-        contentSubview.addSubview(contentTextSubview)
-
-        contentTextSubview.snp.makeConstraints {
-            $0.top.bottom.leading.trailing.equalToSuperview()
-        }
-    }
-    
-    @objc func pressed(sender: UIButton!) {
-        print("Button Clicked")
     }
 
     override func didReceiveMemoryWarning() {

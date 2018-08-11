@@ -10,6 +10,41 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Timeline View Controller-->
+        <scene sceneID="0xD-x8-280">
+            <objects>
+                <viewController id="dEZ-au-Qd3" customClass="TimelineViewController" customModule="Journal" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="WSp-Eu-Nni">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Urv-Cv-tOy">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="엔트리 없음" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="boF-b0-Z55">
+                                        <rect key="frame" x="113" y="277" width="149" height="113"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="DFE-HF-4kS"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="O2B-62-6FR"/>
+                    <connections>
+                        <outlet property="entryCountLabel" destination="boF-b0-Z55" id="zcR-x5-pAn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gSY-MQ-mEc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="552.79999999999995" y="-39.130434782608695"/>
+        </scene>
         <!--Entry View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -29,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1074.4000000000001" y="132.68365817091455"/>
+            <point key="canvasLocation" x="1481" y="-39"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rOM-mA-pVJ">
@@ -42,12 +77,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="evB-MR-Od8"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="cow-Yi-XJz"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bH3-Le-3E4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="135.19999999999999" y="132.68365817091455"/>
+            <point key="canvasLocation" x="-353" y="-39"/>
         </scene>
     </scenes>
 </document>

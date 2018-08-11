@@ -12,7 +12,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    
+     var environment: Environment!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -23,7 +24,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             navViewController.navigationBar.barTintColor = UIColor(patternImage: bgimage!)
             navViewController.navigationBar.tintColor = UIColor.white
         }
+        
+        injectEnvironment()
+        
         return true
+    }
+    
+    private func injectEnvironment() {
+        guard
+            let navViewController = window?.rootViewController as? UINavigationController,
+            let timelineViewController = navViewController.topViewController as? TimelineViewController
+            else { return }
+        timelineViewController.environment = Environment()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Journal {
+protocol EntryRepository {
     
     var numberOfEntries: Int { get }
     func add(_ entry: Entry)
@@ -18,8 +18,8 @@ protocol Journal {
     func recentEntries(max: Int) -> [Entry]
 }
 
-class InMemoryJournal: Journal {
-
+class InMemoryEntryRepository: EntryRepository {
+    
     private var entries: [UUID: Entry]
     
     init(entries: [Entry] = []) {
@@ -61,4 +61,8 @@ class InMemoryJournal: Journal {
         
         return Array(result)
     }
+}
+
+extension InMemoryEntryRepository {
+    static var shared: InMemoryEntryRepository = InMemoryEntryRepository()
 }
