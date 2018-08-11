@@ -19,21 +19,27 @@ extension DateFormatter {
 
 class EntryViewController: UIViewController {
     
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var button: UIButton!
-    
-    @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var button: UIBarButtonItem!
     private var editingEntry: Entry?
     
+    private var textView: UITextView!
     
     private let journal: Journal = InMemoryJournal()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        textView.text = "첫 번째 일기"
-        dateLabel.text = DateFormatter.entryDateFormatter.string(from: Date())
+        title = DateFormatter.entryDateFormatter.string(from: Date())
+        
+        self.textView = UITextView()
+        
+        view.addSubview(self.textView)
+        
+        self.textView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardAppearance(note:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardAppearance(note:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
@@ -59,37 +65,29 @@ class EntryViewController: UIViewController {
             delay: 0.0,
             options: animationOption,
             animations: {
-                self.textViewBottomConstraint.constant = -keyboardHeight
-                self.view.layoutIfNeeded()
+                
+                self.textView.snp.updateConstraints {
+                    $0.bottom.equalToSuperview().offset(-keyboardHeight)
+                }
         },
             completion: nil
         )
     }
     
     private func updateSubView(for isEditing: Bool) {
-        if isEditing {
-            textView.isEditable = true
-            textView.becomeFirstResponder()
-            
-            button.setTitle("save", for: .normal)
-            button.removeTarget(self, action: nil, for: .touchUpInside)
-            button.addTarget(self, action: #selector(saveEntry(_:)), for: .touchUpInside)
-        } else {
-            textView.resignFirstResponder()
-            textView.isEditable = false
-            
-            button.setTitle("edit", for: .normal)
-            button.removeTarget(self, action: nil, for: .touchUpInside)
-            button.addTarget(self, action: #selector(editEntry(_:)), for: .touchUpInside)
-        }
+        button.image = isEditing ? #imageLiteral(resourceName: "baseline_save_white_24pt") : #imageLiteral(resourceName: "baseline_edit_white_24pt")
+        button.target = self
+        button.action = isEditing ? #selector(saveEntry(_:)) : #selector(editEntry)
+        textView.isEditable = isEditing
+        _ = isEditing ? textView.becomeFirstResponder() : textView.resignFirstResponder()
     }
     
     @objc func saveEntry(_ sender: Any) {
         if let oldEntry = self.editingEntry {
-            oldEntry.text = textView.text
+            oldEntry.text = self.textView.text
             journal.update(oldEntry)
         } else {
-            let newEntry: Entry = Entry(text: textView.text)
+            let newEntry: Entry = Entry(text: self.textView.text)
             journal.add(newEntry)
             editingEntry = newEntry
         }

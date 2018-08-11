@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="RJr-Sl-r15">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -17,56 +17,35 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Oa8-a6-TRJ">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2018. 12. 11 sat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="71n-FW-78l">
-                                        <rect key="frame" x="8" y="71" width="116" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oQg-h4-nmf">
-                                        <rect key="frame" x="335" y="66" width="32" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="save"/>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="0.97344614924929451" blue="0.17840010390502514" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Pld-7W-bcj"/>
-                                </constraints>
-                            </view>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="LD9-jL-dTK">
-                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <constraints>
-                            <constraint firstItem="LD9-jL-dTK" firstAttribute="trailing" secondItem="Oa8-a6-TRJ" secondAttribute="trailing" id="FHR-za-UAI"/>
-                            <constraint firstItem="LD9-jL-dTK" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="QFW-QQ-eRi"/>
-                            <constraint firstItem="LD9-jL-dTK" firstAttribute="top" secondItem="Oa8-a6-TRJ" secondAttribute="bottom" id="RJv-jL-IaR"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Oa8-a6-TRJ" secondAttribute="bottom" constant="567" id="Vuw-HF-OPp"/>
-                            <constraint firstItem="Oa8-a6-TRJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="lCY-iv-aQN"/>
-                            <constraint firstItem="Oa8-a6-TRJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="s1X-W3-a1H"/>
-                            <constraint firstItem="LD9-jL-dTK" firstAttribute="leading" secondItem="Oa8-a6-TRJ" secondAttribute="leading" id="sN2-TF-a3C"/>
-                            <constraint firstItem="Oa8-a6-TRJ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="yOB-XU-Yiw"/>
-                        </constraints>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <navigationItem key="navigationItem" id="V34-sc-u19">
+                        <barButtonItem key="rightBarButtonItem" title="save" id="pMm-jL-8dz"/>
+                    </navigationItem>
                     <connections>
-                        <outlet property="button" destination="oQg-h4-nmf" id="3rF-9h-zMe"/>
-                        <outlet property="dateLabel" destination="71n-FW-78l" id="BRd-Vl-Ayx"/>
-                        <outlet property="textView" destination="LD9-jL-dTK" id="4vU-AY-DLK"/>
-                        <outlet property="textViewBottomConstraint" destination="QFW-QQ-eRi" id="NVM-8S-wMv"/>
+                        <outlet property="button" destination="pMm-jL-8dz" id="Ibl-kb-6DQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1074.4000000000001" y="132.68365817091455"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="rOM-mA-pVJ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="RJr-Sl-r15" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="4oS-hx-nOe">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="evB-MR-Od8"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bH3-Le-3E4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="135.19999999999999" y="132.68365817091455"/>
         </scene>

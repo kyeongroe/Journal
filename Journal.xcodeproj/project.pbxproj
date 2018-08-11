@@ -11,6 +11,7 @@
 		C024586B21153C590092E9BE /* Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C024586A21153C590092E9BE /* Journal.swift */; };
 		C024586D211540A50092E9BE /* Identifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C024586C211540A50092E9BE /* Identifiable.swift */; };
 		C042C2372119A6B900B667A2 /* EntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C042C2362119A6B900B667A2 /* EntryTests.swift */; };
+		C0839D58211EC5BA00E9258F /* UIKit+Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0839D57211EC5BA00E9258F /* UIKit+Journal.swift */; };
 		C0B170842115666C002E79F4 /* EntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B170832115666C002E79F4 /* EntryType.swift */; };
 		C0F646C72102F1760098A8ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C62102F1760098A8ED /* AppDelegate.swift */; };
 		C0F646C92102F1760098A8ED /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C82102F1760098A8ED /* EntryViewController.swift */; };
@@ -42,6 +43,7 @@
 		C024586A21153C590092E9BE /* Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Journal.swift; sourceTree = "<group>"; };
 		C024586C211540A50092E9BE /* Identifiable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Identifiable.swift; sourceTree = "<group>"; };
 		C042C2362119A6B900B667A2 /* EntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTests.swift; sourceTree = "<group>"; };
+		C0839D57211EC5BA00E9258F /* UIKit+Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Journal.swift"; sourceTree = "<group>"; };
 		C0B170832115666C002E79F4 /* EntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryType.swift; sourceTree = "<group>"; };
 		C0F646C32102F1760098A8ED /* Journal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Journal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F646C62102F1760098A8ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				C0F646C62102F1760098A8ED /* AppDelegate.swift */,
+				C0839D57211EC5BA00E9258F /* UIKit+Journal.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -374,6 +377,7 @@
 				C0B170842115666C002E79F4 /* EntryType.swift in Sources */,
 				C0FAA991210C4B8700CCD915 /* Entry.swift in Sources */,
 				C024586D211540A50092E9BE /* Identifiable.swift in Sources */,
+				C0839D58211EC5BA00E9258F /* UIKit+Journal.swift in Sources */,
 				C024586B21153C590092E9BE /* Journal.swift in Sources */,
 				C0F646C92102F1760098A8ED /* EntryViewController.swift in Sources */,
 				C0F646C72102F1760098A8ED /* AppDelegate.swift in Sources */,
