@@ -9,7 +9,7 @@
 import Foundation
 
 protocol EntryType: Identifiable, Equatable {
-    var id: Int { get }
+    var id: UUID { get }
     var createdAt: Date { get }
     var text: String { get set }
 }

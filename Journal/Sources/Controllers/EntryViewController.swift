@@ -9,9 +9,99 @@
 import UIKit
 import SnapKit
 
-class EntryViewController: UIViewController {
+extension DateFormatter {
+    static var entryDateFormatter: DateFormatter = {
+        let df = DateFormatter.init()
+        df.dateFormat = "yyyy. M. dd. EEE"
+        return df
+    }()
+}
 
+class EntryViewController: UIViewController {
+    
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var button: UIButton!
+    
+    @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
+    private var editingEntry: Entry?
+    
+    
+    private let journal: Journal = InMemoryJournal()
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        textView.text = "첫 번째 일기"
+        dateLabel.text = DateFormatter.entryDateFormatter.string(from: Date())
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardAppearance(note:)), name: Notification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardAppearance(note:)), name: Notification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateSubView(for: true)
+    }
+    
+    @objc private func handleKeyboardAppearance(note: Notification) {
+        guard
+            let userInfo = note.userInfo,
+            let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+            let duration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as? TimeInterval,
+            let animationCurve = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? UInt
+            else { return }
+        let keyboardHeight: CGFloat = note.name == Notification.Name.UIKeyboardWillShow ? keyboardFrameValue.cgRectValue.height
+            :0
+        let animationOption = UIViewAnimationOptions(rawValue: animationCurve)
+        UIView.animate(
+            withDuration: duration,
+            delay: 0.0,
+            options: animationOption,
+            animations: {
+                self.textViewBottomConstraint.constant = -keyboardHeight
+                self.view.layoutIfNeeded()
+        },
+            completion: nil
+        )
+    }
+    
+    private func updateSubView(for isEditing: Bool) {
+        if isEditing {
+            textView.isEditable = true
+            textView.becomeFirstResponder()
+            
+            button.setTitle("save", for: .normal)
+            button.removeTarget(self, action: nil, for: .touchUpInside)
+            button.addTarget(self, action: #selector(saveEntry(_:)), for: .touchUpInside)
+        } else {
+            textView.resignFirstResponder()
+            textView.isEditable = false
+            
+            button.setTitle("edit", for: .normal)
+            button.removeTarget(self, action: nil, for: .touchUpInside)
+            button.addTarget(self, action: #selector(editEntry(_:)), for: .touchUpInside)
+        }
+    }
+    
+    @objc func saveEntry(_ sender: Any) {
+        if let oldEntry = self.editingEntry {
+            oldEntry.text = textView.text
+            journal.update(oldEntry)
+        } else {
+            let newEntry: Entry = Entry(text: textView.text)
+            journal.add(newEntry)
+            editingEntry = newEntry
+        }
+        
+        updateSubView(for: false)
+    }
+    
+    @objc func editEntry(_ sender: Any) {
+        updateSubView(for: true)
+    }
+    
+    func deprecatedviewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         let titleConfigSubview = UIView()
@@ -42,6 +132,8 @@ class EntryViewController: UIViewController {
         btnForSaving.setTitle("저장", for: .normal)
         btnForSaving.setTitleColor(.black, for: .normal)
         
+//        btnForSaving.addTarget(self, action: #selector(self.pressed(_:)), forControlEvents: .TouchUpInside)
+        
         titleConfigSubview.addSubview(btnForSaving)
         
         btnForSaving.snp.makeConstraints {
@@ -70,6 +162,10 @@ class EntryViewController: UIViewController {
         contentTextSubview.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
         }
+    }
+    
+    @objc func pressed(sender: UIButton!) {
+        print("Button Clicked")
     }
 
     override func didReceiveMemoryWarning() {

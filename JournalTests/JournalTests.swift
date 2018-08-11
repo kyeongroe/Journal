@@ -32,7 +32,7 @@ class JournalTests: XCTestCase {
     func testEditEntryText() {
         // Setup
         // Nimble
-        let entry = Entry(id: 0, createdAt: Date(), text: "첫 번째 일기") // Run
+        let entry = Entry(id: UUID(), createdAt:Date(), text: "첫 번째 일기") // Run
         entry.text = "첫 번째 테스트"
         // Verify
         expect(entry.text).to(equal("첫 번째 테스트"))
@@ -48,11 +48,11 @@ class JournalTests: XCTestCase {
     func testAddEntryToJournal() {
         // Setup
         let journal = InMemoryJournal()
-        let newEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let newEntry = Entry(id: UUID(), createdAt:Date(), text: "일기")
         // Run
         journal.add(newEntry)
         // Verify
-        let entryInJournal: Entry? = journal.entry(with: 1)
+        let entryInJournal: Entry? = journal.entry(with: newEntry.id)
         expect(entryInJournal) == newEntry
         expect(entryInJournal).to(equal(newEntry))
         expect(entryInJournal?.isIdentical(to: newEntry)).to(equal(true))
@@ -60,10 +60,10 @@ class JournalTests: XCTestCase {
     
     func testGetEntryWithId() {
         // Setup
-        let oldEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let oldEntry = Entry(text: "일기")
         let journal = InMemoryJournal(entries: [oldEntry])
         // Run
-        let entry = journal.entry(with: 1)
+        let entry = journal.entry(with: oldEntry.id)
         // Verify
         expect(entry).to(equal(oldEntry))
         expect(entry?.isIdentical(to: oldEntry)).to(equal(true))
@@ -71,14 +71,14 @@ class JournalTests: XCTestCase {
     
     func testUpdateEntry() {
         // Setup
-        let oldEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let oldEntry = Entry(text: "일기")
         
         let journal = InMemoryJournal(entries: [oldEntry])
         // Run
         oldEntry.text = "일기 내용을 수정했습니다"
         journal.update(oldEntry)
         // Verify
-        let entry = journal.entry(with: 1)
+        let entry = journal.entry(with: oldEntry.id)
         expect(entry).to(equal(oldEntry))
         expect(entry?.isIdentical(to: oldEntry)).to(equal(true))
         expect(entry?.text).to(equal("일기 내용을 수정했습니다"))
@@ -86,19 +86,19 @@ class JournalTests: XCTestCase {
     
     func testRemoveEntryFromJournal() {
         // Setup
-        let oldEntry = Entry(id: 1, createdAt: Date(), text: "일기")
+        let oldEntry = Entry(text: "일기")
         let journal = InMemoryJournal(entries: [oldEntry])
         // Run
         journal.remove(oldEntry)
         // Verify
-        let entry = journal.entry(with: 1)
+        let entry = journal.entry(with: UUID())
         expect(entry).to(beNil())
     }
     
     func test_최근_순으로_엔트리를_불러올_수_있다() { // Setup
-        let dayBeforeYesterday = Entry(id: 1, createdAt: Date.distantPast, text: "그저께 일기")
-        let yesterDay = Entry(id: 2, createdAt: Date(), text: "어제 일기")
-        let today = Entry(id: 3, createdAt: Date.distantFuture, text: "오늘 일기")
+        let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
+        let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
+        let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
         let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
         
         // Run
@@ -109,9 +109,9 @@ class JournalTests: XCTestCase {
     }
     
     func test_요청한_엔트리의_수만큼_최신_순으로_반환한다() { // Setup
-        let dayBeforeYesterday = Entry(id: 1, createdAt: Date.distantPast, text: "그저께 일기")
-        let yesterDay = Entry(id: 2, createdAt: Date(), text: "어제 일기")
-        let today = Entry(id: 3, createdAt: Date.distantFuture, text: "오늘 일기")
+        let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
+        let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
+        let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
         let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: 1)
@@ -121,9 +121,9 @@ class JournalTests: XCTestCase {
     }
     
     func test_존재하는_엔트리보다_많은_수를_요청하면_존재하는_엔트리만큼만_반환한다() { // Setup
-        let dayBeforeYesterday = Entry(id: 1, createdAt: Date.distantPast, text: "그저께 일기")
-        let yesterDay = Entry(id: 2, createdAt: Date(), text: "어제 일기")
-        let today = Entry(id: 3, createdAt: Date.distantFuture, text: "오늘 일기")
+        let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
+        let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
+        let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
         let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: 10)
@@ -133,13 +133,30 @@ class JournalTests: XCTestCase {
     }
     
     func test_존재하는_엔트리보다_적은_수를_요청하면_NIL_반환한다() { // Setup
-        let dayBeforeYesterday = Entry(id: 1, createdAt: Date.distantPast, text: "그저께 일기")
-        let yesterDay = Entry(id: 2, createdAt: Date(), text: "어제 일기")
-        let today = Entry(id: 3, createdAt: Date.distantFuture, text: "오늘 일기")
+        let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
+        let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
+        let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
         let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: -1)
         // Verify
         expect(entries).to(equal([]))
+    }
+    
+    func test_엔트리의_개수를_반환한다() { // Setup
+        let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
+        let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
+        let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
+        
+        let journal = InMemoryJournal()
+        // Verify
+        expect(journal.numberOfEntries).to(equal(0))
+        
+        journal.add(dayBeforeYesterday)
+        expect(journal.numberOfEntries).to(equal(1))
+        journal.add(yesterDay)
+        expect(journal.numberOfEntries).to(equal(2))
+        journal.add(today)
+        expect(journal.numberOfEntries).to(equal(3))
     }
 }

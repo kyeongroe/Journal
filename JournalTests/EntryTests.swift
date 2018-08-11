@@ -37,7 +37,7 @@ class EntryTests: XCTestCase {
     }
     
     func testBasicEntryType() {
-        let entry: Entry = Entry(id: 0, createdAt: Date(), text: "첫 번째 일기") // Run
+        let entry: Entry = Entry(id: UUID(), createdAt: Date(), text: "첫 번째 일기") // Run
         entry.text = "첫 번째 테스트"
         // Verify
         expect(entry.text).to(equal("첫 번째 테스트"))
