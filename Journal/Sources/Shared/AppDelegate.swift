@@ -13,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-     var environment: Environment!
+    var environment: Environment!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -35,7 +35,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let navViewController = window?.rootViewController as? UINavigationController,
             let timelineViewController = navViewController.topViewController as? TimelineViewController
             else { return }
-        timelineViewController.environment = Environment()
+        
+        let entries: [Entry] = [ // 어제
+            Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"),
+            // 2일 전
+            Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"),
+            // 3일 전
+            Entry(createdAt: Date.before(3), text: "3일 전 일기"), Entry(createdAt: Date.before(3), text: "3일 전 일기")
+        ]
+        let entryRepo = InMemoryEntryRepository(entries: entries)
+        timelineViewController.environment = Environment(entryRepository: entryRepo)
+//        timelineViewController.environment = Environment()
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

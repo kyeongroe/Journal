@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -34,15 +35,63 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="b9B-NL-3Ne">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EntryCell" id="2bO-pD-IDF" customClass="EntryTableViewCell" customModule="Journal" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
-                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="b9B-NL-3Ne" id="fgD-Iu-tVx">
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2bO-pD-IDF" id="f88-9c-ZXE">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="d8G-i7-gKI">
+                                                            <rect key="frame" x="8" y="0.0" width="359" height="43.5"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="일기장 내용" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JZQ-xN-ojW">
+                                                                    <rect key="frame" x="0.0" y="11.5" width="279" height="20.5"/>
+                                                                    <color key="backgroundColor" red="0.0" green="0.97680455450000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="KGC-ED-ogQ">
+                                                                    <rect key="frame" x="279" y="0.0" width="80" height="43.5"/>
+                                                                    <subviews>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5h-7F-ceX">
+                                                                            <rect key="frame" x="27" y="0.0" width="26" height="20.5"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                            <nil key="textColor"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nQi-zC-n3h">
+                                                                            <rect key="frame" x="16" y="20.5" width="48" height="23"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                                            <color key="textColor" red="0.6735443525" green="0.6836360776" blue="0.73529532070000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="80" id="MNQ-YL-z0E"/>
+                                                                    </constraints>
+                                                                </stackView>
+                                                            </subviews>
+                                                        </stackView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="d8G-i7-gKI" firstAttribute="centerY" secondItem="f88-9c-ZXE" secondAttribute="centerY" id="7wo-34-pLB"/>
+                                                        <constraint firstAttribute="trailing" secondItem="d8G-i7-gKI" secondAttribute="trailing" constant="8" id="A51-tf-vDt"/>
+                                                        <constraint firstItem="d8G-i7-gKI" firstAttribute="leading" secondItem="f88-9c-ZXE" secondAttribute="leading" constant="8" id="AqP-b0-0yg"/>
+                                                    </constraints>
                                                 </tableViewCellContentView>
+                                                <connections>
+                                                    <outlet property="ampmLabel" destination="j5h-7F-ceX" id="Fau-NT-qgX"/>
+                                                    <outlet property="entryTextLabel" destination="JZQ-xN-ojW" id="rZK-bu-29Y"/>
+                                                    <outlet property="timeLabel" destination="nQi-zC-n3h" id="d0L-62-Vo0"/>
+                                                    <segue destination="BYZ-38-t0r" kind="show" identifier="showEntry" id="AfD-Ij-XMd"/>
+                                                </connections>
                                             </tableViewCell>
                                         </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="dEZ-au-Qd3" id="7Ta-3q-4pS"/>
+                                        </connections>
                                     </tableView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -52,7 +101,7 @@
                         <viewLayoutGuide key="safeArea" id="DFE-HF-4kS"/>
                     </view>
                     <navigationItem key="navigationItem" id="O2B-62-6FR">
-                        <barButtonItem key="rightBarButtonItem" title="+" id="G0N-kx-ae2">
+                        <barButtonItem key="rightBarButtonItem" title="+" image="baseline_add_white_24pt" id="G0N-kx-ae2">
                             <connections>
                                 <segue destination="BYZ-38-t0r" kind="show" identifier="addEntry" id="f3c-17-Hd5"/>
                             </connections>
@@ -61,6 +110,7 @@
                     <connections>
                         <outlet property="addButton" destination="G0N-kx-ae2" id="aZw-jF-P7D"/>
                         <outlet property="entryCountLabel" destination="boF-b0-Z55" id="zcR-x5-pAn"/>
+                        <outlet property="tableview" destination="N7j-YQ-lQ7" id="kc2-MZ-vLE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gSY-MQ-mEc" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -78,10 +128,18 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="V34-sc-u19">
-                        <barButtonItem key="rightBarButtonItem" title="save" id="pMm-jL-8dz"/>
+                        <rightBarButtonItems>
+                            <barButtonItem title="save" id="pMm-jL-8dz"/>
+                            <barButtonItem title="remove" image="baseline_delete_white_24pt" id="SfY-Ev-uzd">
+                                <connections>
+                                    <action selector="removeEntry:" destination="BYZ-38-t0r" id="Zh4-gT-Ukc"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="button" destination="pMm-jL-8dz" id="Ibl-kb-6DQ"/>
+                        <outlet property="removeButton" destination="SfY-Ev-uzd" id="UBT-KH-bUN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -107,4 +165,11 @@
             <point key="canvasLocation" x="-353" y="-39"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="baseline_add_white_24pt" width="24" height="24"/>
+        <image name="baseline_delete_white_24pt" width="24" height="24"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="AfD-Ij-XMd"/>
+    </inferredMetricsTieBreakers>
 </document>

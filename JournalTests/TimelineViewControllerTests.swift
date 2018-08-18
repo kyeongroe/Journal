@@ -14,8 +14,8 @@ import Nimble
 class TimelineViewControllerTests: XCTestCase {
     var vc: TimelineViewController!
     override func setUp() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        vc = storyboard.instantiateViewController(withIdentifier: "TimelineViewController") as! TimelineViewController = vc.view // loadView()와 viewDidLoad()를 강제로 호출
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        vc = UIStoryboard.instantiateViewController(withIdentifier: "TimelineViewController") as! TimelineViewController = vc.view // loadView()와 viewDidLoad()를 강제로 호출
     }
     func testEntryCountLabelTextWhenNoEntry() {
         // Setup
@@ -23,13 +23,15 @@ class TimelineViewControllerTests: XCTestCase {
         // Run
         vc.viewWillAppear(false)
         // Verify
-        expect(self.vc.entryCountLabel.text) == "엔트리 없음" }
+        expect(self.vc.entryCountLabel.text) == "엔트리 없음"
+    }
     func testEntryCountLabelTextWhenEntryExists() {
         // Setup
-        let repository = InMemoryEntryRepository(entries: [Entry.dayBeforeYesterday, Entry.yesterDay, Entry.today])
+        let repository = InMemoryEntryRepository(entries: [Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기"), Entry(id: UUID(), createdAt: Date(), text: "어제 일기"), Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")])
         vc.environment = Environment(entryRepository: repository)
         // Run
         vc.viewWillAppear(false)
         // Verify
-        expect(self.vc.entryCountLabel.text) == "엔트리 수: 3" }
+        expect(self.vc.entryCountLabel.text) == "엔트리 수: 3"
+    }
 }

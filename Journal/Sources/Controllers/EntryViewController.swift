@@ -9,29 +9,38 @@
 import UIKit
 import SnapKit
 
-extension DateFormatter {
-    static var entryDateFormatter: DateFormatter = {
-        let df = DateFormatter.init()
-        df.dateFormat = "yyyy. M. dd. EEE"
-        return df
-    }()
+protocol EntryViewControllerDelegate: class {
+    func didRemoveEntry(_ entry: Entry)
 }
 
 class EntryViewController: UIViewController {
     
     @IBOutlet weak var button: UIBarButtonItem!
-    private var editingEntry: Entry?
+    @IBOutlet weak var removeButton: UIBarButtonItem!
+    var editingEntry: Entry?
+    
+    weak var delegate: EntryViewControllerDelegate?
     
     private var textView: UITextView!
     
     var environment: Environment!
     
+    var hasEntry: Bool { return editingEntry != nil }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        removeButton.isEnabled = hasEntry
         
         title = DateFormatter.entryDateFormatter.string(from: Date())
         
         self.textView = UITextView()
+        
+        textView.text = editingEntry?.text
+        let date = editingEntry?.createdAt ?? Date()
+        title = DateFormatter.entryDateFormatter.string(from: date)
+        
+        updateSubView(for: editingEntry == nil)
         
         view.addSubview(self.textView)
         
@@ -47,8 +56,6 @@ class EntryViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        updateSubView(for: true)
-        print("asdf")
     }
     
     @objc private func handleKeyboardAppearance(note: Notification) {
@@ -75,8 +82,23 @@ class EntryViewController: UIViewController {
         )
     }
     
+    @IBAction func removeEntry(_ sender: Any) {
+        guard let entryToRemove = editingEntry else { return }
+        
+        let alertController = UIAlertController.init(title: "일기를 제거하겠습니까?", message: "이 작업은 되돌릴 수 없습니다", preferredStyle: .alert)
+        let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+            self.environment.entryRepository.remove(entryToRemove)
+            self.navigationController?.popViewController(animated: true)
+        }
+        alertController.addAction(deleteAction)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
+    }
     private func updateSubView(for isEditing: Bool) {
         button.image = isEditing ? #imageLiteral(resourceName: "baseline_save_white_24pt") : #imageLiteral(resourceName: "baseline_edit_white_24pt")
+        
         button.target = self
         button.action = isEditing ? #selector(saveEntry(_:)) : #selector(editEntry)
         self.textView.isEditable = isEditing
@@ -91,6 +113,7 @@ class EntryViewController: UIViewController {
             let newEntry: Entry = Entry(text: self.textView.text)
             environment.entryRepository.add(newEntry)
             editingEntry = newEntry
+            removeButton.isEnabled = true
         }
 
         updateSubView(for: false)
