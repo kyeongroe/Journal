@@ -12,9 +12,9 @@ import SnapKit
 class TimelineViewController: UIViewController {
     
     @IBOutlet weak var addButton: UIBarButtonItem!
-    @IBOutlet weak var entryCountLabel: UILabel!
     
-    @IBOutlet weak var tableview: UITableView!
+    var tableview: UITableView!
+    
     var environment: Environment!
     
     private var dates: [Date] = []
@@ -29,6 +29,21 @@ class TimelineViewController: UIViewController {
         
         super.viewDidLoad()
         title = "Journal"
+        
+        tableview = UITableView()
+        
+        view.addSubview(tableview)
+        
+        tableview.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        tableview.register(EntryTableViewCell.self, forCellReuseIdentifier: "EntryCell")
+        
+        tableview.rowHeight = UITableViewAutomaticDimension
+        tableview.estimatedRowHeight = 44
         
         tableview.dataSource = self
         tableview.delegate = self
@@ -75,9 +90,37 @@ class TimelineViewController: UIViewController {
 }
 
 class EntryTableViewCell: UITableViewCell {
-    @IBOutlet weak var entryTextLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var ampmLabel: UILabel!
+    let entryTextLabel = UILabel()
+    let timeLabel = UILabel()
+    let ampmLabel = UILabel()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        entryTextLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        ampmLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(entryTextLabel)
+        contentView.addSubview(timeLabel)
+        contentView.addSubview(ampmLabel)
+        
+        self.entryTextLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+
+        self.timeLabel.snp.makeConstraints {
+            $0.leading.equalTo(entryTextLabel.snp.trailing)
+            $0.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 extension TimelineViewController: UITableViewDataSource {
@@ -105,6 +148,19 @@ extension TimelineViewController: UITableViewDataSource {
         cell.timeLabel.text = DateFormatter.timeFormatter.string(from: entry.createdAt)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let vc = storyboard.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
+        
+        vc.environment = environment
+        vc.editingEntry = self.entry(for: indexPath)
+        vc.delegate = self
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension TimelineViewController: EntryViewControllerDelegate {
@@ -115,21 +171,33 @@ extension TimelineViewController: EntryViewControllerDelegate {
 
 extension TimelineViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .normal, title:  nil) { (ac:UIContextualAction, view:UIView, success:(Bool) -> Void) in
+        let deleteAction = UIContextualAction(style: .normal, title:  nil) { (ac:UIContextualAction, view:UIView, success:@escaping (Bool) -> Void) in
             let date = self.dates[indexPath.section]
             let entries = self.entries(for: date)
-            self.environment.entryRepository.remove(entries[indexPath.row])
-            if entries.count == 1 { self.dates = self.dates.filter { $0 != date } }
-            UIView.animate(withDuration: 0.3) {
-                tableView.beginUpdates()
-                if entries.count == 1 {
-                    tableView.deleteSections(IndexSet.init(integer: indexPath.section), with: .automatic)
-                } else {
-                    tableView.deleteRows(at: [indexPath], with: .automatic)
+            let entryToRemove = entries[indexPath.row]
+            
+            let alertController = UIAlertController.init(title: "일기를 제거하겠습니까?", message: "이 작업은 되돌릴 수 없습니다", preferredStyle: .alert)
+            let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+                self.environment.entryRepository.remove(entryToRemove)
+                if entries.count == 1 { self.dates = self.dates.filter { $0 != date } }
+                UIView.animate(withDuration: 0.3) {
+                    tableView.beginUpdates()
+                    if entries.count == 1 {
+                        tableView.deleteSections(IndexSet.init(integer: indexPath.section), with: .automatic)
+                    } else {
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
+                    }
+                    tableView.endUpdates()
                 }
-                tableView.endUpdates()
+                success(true)
             }
-            success(true)
+            alertController.addAction(deleteAction)
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            
         }
         deleteAction.image = #imageLiteral(resourceName: "baseline_delete_white_24pt")
         deleteAction.backgroundColor = UIColor.gradientEnd
