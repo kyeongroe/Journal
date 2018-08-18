@@ -79,8 +79,8 @@ class EntryViewController: UIViewController {
         button.image = isEditing ? #imageLiteral(resourceName: "baseline_save_white_24pt") : #imageLiteral(resourceName: "baseline_edit_white_24pt")
         button.target = self
         button.action = isEditing ? #selector(saveEntry(_:)) : #selector(editEntry)
-        textView.isEditable = isEditing
-        _ = isEditing ? textView.becomeFirstResponder() : textView.resignFirstResponder()
+        self.textView.isEditable = isEditing
+        _ = isEditing ? self.textView.becomeFirstResponder() : self.textView.resignFirstResponder()
     }
     
     @objc func saveEntry(_ sender: Any) {

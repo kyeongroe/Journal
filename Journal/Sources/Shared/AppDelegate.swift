@@ -33,9 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func injectEnvironment() {
         guard
             let navViewController = window?.rootViewController as? UINavigationController,
-            let timelineViewController = navViewController.topViewController as? TimelineViewController
+//            let timelineViewController = navViewController.topViewController as? TimelineViewController
+            let entryViewController = navViewController.topViewController as? EntryViewController
             else { return }
-        timelineViewController.environment = Environment()
+        entryViewController.environment = Environment()
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

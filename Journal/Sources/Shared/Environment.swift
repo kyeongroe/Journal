@@ -10,4 +10,5 @@ class Environment {
     let entryRepository: EntryRepository
     init(entryRepository: EntryRepository = InMemoryEntryRepository()) {
         self.entryRepository = entryRepository
-    } }
+    }
+}
