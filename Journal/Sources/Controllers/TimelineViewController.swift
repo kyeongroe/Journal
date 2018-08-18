@@ -11,11 +11,15 @@ import SnapKit
 
 class TimelineViewController: UIViewController {
     
+    @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var entryCountLabel: UILabel!
     
     var environment: Environment!
     
     override func viewDidLoad() {
+        
+        addButton.image = #imageLiteral(resourceName: "baseline_add_white_24pt")
+        
         super.viewDidLoad()
         title = "Journal"
     }
@@ -33,5 +37,6 @@ class TimelineViewController: UIViewController {
                 vc.environment = environment
             } default:
             break
-        } }
+        }
+    }
 }

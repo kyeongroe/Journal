@@ -92,7 +92,7 @@ class EntryViewController: UIViewController {
             environment.entryRepository.add(newEntry)
             editingEntry = newEntry
         }
-        
+
         updateSubView(for: false)
     }
     

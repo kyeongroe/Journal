@@ -47,7 +47,7 @@ class JournalTests: XCTestCase {
     
     func testAddEntryToJournal() {
         // Setup
-        let journal = InMemoryJournal()
+        let journal = InMemoryEntryRepository()
         let newEntry = Entry(id: UUID(), createdAt:Date(), text: "일기")
         // Run
         journal.add(newEntry)
@@ -61,7 +61,7 @@ class JournalTests: XCTestCase {
     func testGetEntryWithId() {
         // Setup
         let oldEntry = Entry(text: "일기")
-        let journal = InMemoryJournal(entries: [oldEntry])
+        let journal = InMemoryEntryRepository(entries: [oldEntry])
         // Run
         let entry = journal.entry(with: oldEntry.id)
         // Verify
@@ -73,7 +73,7 @@ class JournalTests: XCTestCase {
         // Setup
         let oldEntry = Entry(text: "일기")
         
-        let journal = InMemoryJournal(entries: [oldEntry])
+        let journal = InMemoryEntryRepository(entries: [oldEntry])
         // Run
         oldEntry.text = "일기 내용을 수정했습니다"
         journal.update(oldEntry)
@@ -87,7 +87,7 @@ class JournalTests: XCTestCase {
     func testRemoveEntryFromJournal() {
         // Setup
         let oldEntry = Entry(text: "일기")
-        let journal = InMemoryJournal(entries: [oldEntry])
+        let journal = InMemoryEntryRepository(entries: [oldEntry])
         // Run
         journal.remove(oldEntry)
         // Verify
@@ -99,7 +99,7 @@ class JournalTests: XCTestCase {
         let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
         let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
         let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
-        let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
+        let journal = InMemoryEntryRepository(entries: [dayBeforeYesterday, yesterDay, today])
         
         // Run
         let entries = journal.recentEntries(max: 3)
@@ -112,7 +112,7 @@ class JournalTests: XCTestCase {
         let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
         let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
         let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
-        let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
+        let journal = InMemoryEntryRepository(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: 1)
         // Verify
@@ -124,7 +124,7 @@ class JournalTests: XCTestCase {
         let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
         let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
         let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
-        let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
+        let journal = InMemoryEntryRepository(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: 10)
         // Verify
@@ -136,7 +136,7 @@ class JournalTests: XCTestCase {
         let dayBeforeYesterday = Entry(id: UUID(), createdAt: Date.distantPast, text: "그저께 일기")
         let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
         let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
-        let journal = InMemoryJournal(entries: [dayBeforeYesterday, yesterDay, today])
+        let journal = InMemoryEntryRepository(entries: [dayBeforeYesterday, yesterDay, today])
         // Run
         let entries = journal.recentEntries(max: -1)
         // Verify
@@ -148,7 +148,7 @@ class JournalTests: XCTestCase {
         let yesterDay = Entry(id: UUID(), createdAt: Date(), text: "어제 일기")
         let today = Entry(id: UUID(), createdAt: Date.distantFuture, text: "오늘 일기")
         
-        let journal = InMemoryJournal()
+        let journal = InMemoryEntryRepository()
         // Verify
         expect(journal.numberOfEntries).to(equal(0))
         
