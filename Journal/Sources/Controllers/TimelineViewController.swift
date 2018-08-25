@@ -126,15 +126,13 @@ extension TimelineViewController: UITableViewDelegate {
             
             alertController.addAction(cancelAction)
             self.present(alertController, animated: true, completion: nil)
-            
-            
         }
+        
         deleteAction.image = #imageLiteral(resourceName: "baseline_delete_white_24pt")
         deleteAction.backgroundColor = UIColor.gradientEnd
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
-
 
 struct EntryTableViewCellViewModel {
     let entry: Entry
