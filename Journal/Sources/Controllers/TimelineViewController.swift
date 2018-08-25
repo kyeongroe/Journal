@@ -167,9 +167,9 @@ class EntryTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         timeStack.axis = .vertical
-        timeStack.distribution = .fillEqually
+        timeStack.distribution = .fill
         timeStack.alignment = .center
-        timeStack.spacing = 5
+        timeStack.spacing = 0
         
         timeStack.addSubview(timeLabel)
         timeStack.addSubview(ampmLabel)
@@ -178,12 +178,16 @@ class EntryTableViewCell: UITableViewCell {
         
         titleStack.addSubview(timeStack)
         
-        titleStack.axis = .vertical
-        titleStack.distribution = .fillEqually
-        titleStack.alignment = .fill
-        titleStack.spacing = 5
+//        titleStack.axis = .vertical
+//        titleStack.distribution = .fill
+//        titleStack.alignment = .fill
+//        titleStack.spacing = 0
         
         contentView.addSubview(titleStack)
+        
+        contentView.snp.makeConstraints {
+            $0.height.equalTo(80)
+        }
         
         ampmLabel.backgroundColor = .red
         entryTextLabel.backgroundColor = .yellow
@@ -192,29 +196,27 @@ class EntryTableViewCell: UITableViewCell {
         ampmLabel.snp.makeConstraints {
             $0.height.equalTo(40)
         }
-        
+
         entryTextLabel.snp.makeConstraints {
             $0.height.equalTo(40)
+            $0.centerY.equalToSuperview()
         }
-        
+
         timeLabel.snp.makeConstraints {
             $0.top.equalTo(ampmLabel.snp.bottom)
             $0.height.equalTo(40)
         }
         
-        timeStack.snp.makeConstraints {
-            $0.top.equalTo(contentView)
-            $0.trailing.equalTo(titleStack).offset(8)
-            $0.bottom.equalTo(contentView)
-            $0.height.equalTo(80)
-            $0.width.equalTo(80)
-        }
+//        timeStack.snp.makeConstraints {
+//            $0.leading.equalTo(titleStack.snp.trailing)
+//            $0.trailing.equalToSuperview()
+//        }
         
         titleStack.snp.makeConstraints {
-            $0.top.equalTo(contentView)
-            $0.leading.equalTo(contentView).offset(8)
-            $0.trailing.equalTo(timeStack.snp.leading).offset(10)
-            $0.bottom.equalTo(contentView)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview().offset(8)
+            $0.height.equalTo(80)
         }
     }
     
