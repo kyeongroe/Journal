@@ -27,8 +27,13 @@ class EntryViewViewModel {
     var trashIconEnabled: Bool { return hasEntry }
     var title: String {
         let date = entry?.createdAt ?? environment.now()
-        return DateFormatter.entryDateFormatter.string(from: date)
+        let df = DateFormatter.formatter(with: environment.settings.dateFormat.rawValue)
+        return df.string(from: date)
     }
+    var textViewFont: UIFont {
+        return UIFont.systemFont(ofSize: environment.settings.fontSize.rawValue)
+    }
+    
     var textViewText: String? { return entry?.text }
     private(set) var isEditing: Bool = false
     var textViewEditable: Bool { return isEditing }

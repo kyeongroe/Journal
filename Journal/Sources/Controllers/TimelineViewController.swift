@@ -63,6 +63,11 @@ class TimelineViewController: UIViewController {
                 let selectedIP = tableview.indexPathForSelectedRow {
                 vc.viewModel = viewModel.entryViewModel(for: selectedIP)
             }
+        case .some("showSetting"):
+            if
+                let vc = segue.destination as? SettingsTableViewController {
+                vc.viewModel = viewModel.settingsViewModel
+            }
         default:
             break
         }
@@ -134,9 +139,11 @@ extension TimelineViewController: UITableViewDelegate {
     }
 }
 
-struct EntryTableViewCellViewModel {
+struct EntryTableViewCellModel {
     let entry: Entry
+    let environment: Environment
     var entryText: String { return entry.text }
+    var entryTextFont: UIFont { return UIFont.systemFont(ofSize: environment.settings.fontSize.rawValue) }
     var createdDateText: String { return DateFormatter.timeFormatter.string(from: entry.createdAt) }
     var ampmText: String { return DateFormatter.ampmFormatter.string(from: entry.createdAt) }
 }
@@ -148,7 +155,7 @@ class EntryTableViewCell: UITableViewCell {
     let titleSlack = UIStackView()
     let timeSlack = UIStackView()
     
-    var viewModel: EntryTableViewCellViewModel? {
+    var viewModel: EntryTableViewCellModel? {
         didSet {
             entryTextLabel.text = viewModel?.entryText
             timeLabel.text = viewModel?.createdDateText

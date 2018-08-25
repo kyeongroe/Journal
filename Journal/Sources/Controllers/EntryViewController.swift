@@ -28,6 +28,7 @@ class EntryViewController: UIViewController {
         
         self.textView = UITextView()
         
+        textView.font = viewModel.textViewFont
         textView.text = viewModel.textViewText
 
         title = viewModel.title

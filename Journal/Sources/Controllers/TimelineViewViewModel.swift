@@ -32,15 +32,16 @@ class TimelineViewViewModel {
     
     var numberOfDates: Int { return dates.count }
     func headerTitle(of section: Int) -> String {
-        return DateFormatter.entryDateFormatter.string(from: dates[section])
+        let df = DateFormatter.formatter(with: environment.settings.dateFormat.rawValue)
+        return df.string(from: dates[section])
     }
     func numberOfItems(of section: Int) -> Int {
         return entries(for: dates[section]).count
     }
     
-    func entryTableViewCellModel(for indexPath: IndexPath) -> EntryTableViewCellViewModel {
+    func entryTableViewCellModel(for indexPath: IndexPath) -> EntryTableViewCellModel {
         let entry = self.entry(for: indexPath)
-        return EntryTableViewCellViewModel(entry: entry)
+        return EntryTableViewCellModel(entry: entry, environment: environment)
     }
     
     func newEntryViewViewModel() -> EntryViewViewModel {
@@ -53,6 +54,8 @@ class TimelineViewViewModel {
         entryVM.delegate = self
         return entryVM
     }
+    
+    lazy var settingsViewModel: SettingsTableViewViewModel = SettingsTableViewViewModel(environment: environment)
     
     func removeEntry(at indexPath: IndexPath) {
         let isLastEntryInSection = numberOfItems(of: indexPath.section) == 1
