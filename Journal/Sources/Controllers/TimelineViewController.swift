@@ -93,28 +93,59 @@ class EntryTableViewCell: UITableViewCell {
     let entryTextLabel = UILabel()
     let timeLabel = UILabel()
     let ampmLabel = UILabel()
+    let titleSlack = UIStackView()
+    let timeSlack = UIStackView()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        entryTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        ampmLabel.translatesAutoresizingMaskIntoConstraints = false
+    
+        timeSlack.translatesAutoresizingMaskIntoConstraints = false
+        timeSlack.axis = .horizontal
+        timeSlack.distribution = .fillEqually
+        timeSlack.alignment = .center
+        timeSlack.spacing = 5
         
-        contentView.addSubview(entryTextLabel)
-        contentView.addSubview(timeLabel)
-        contentView.addSubview(ampmLabel)
+        timeSlack.addSubview(timeLabel)
+        timeSlack.addSubview(ampmLabel)
         
-        self.entryTextLabel.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+        titleSlack.addSubview(entryTextLabel)
+        
+        titleSlack.addSubview(timeSlack)
+        
+        titleSlack.translatesAutoresizingMaskIntoConstraints = false
+        titleSlack.axis = .vertical
+        titleSlack.distribution = .fillEqually
+        titleSlack.alignment = .fill
+        titleSlack.spacing = 5
+        
+        contentView.addSubview(titleSlack)
+        
+        ampmLabel.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        entryTextLabel.snp.makeConstraints {
+            $0.height.equalTo(40)
+        }
+        
+        timeLabel.snp.makeConstraints {
+            $0.top.equalTo(ampmLabel.snp.bottom)
+            $0.height.equalTo(40)
+        }
+    
+        timeSlack.snp.makeConstraints {
+            $0.top.equalTo(contentView)
+            $0.trailing.equalTo(contentView).offset(8)
+            $0.bottom.equalTo(contentView)
+            $0.height.equalTo(80)
+            $0.width.equalTo(80)
         }
 
-        self.timeLabel.snp.makeConstraints {
-            $0.leading.equalTo(entryTextLabel.snp.trailing)
-            $0.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+        titleSlack.snp.makeConstraints {
+            $0.top.equalTo(contentView)
+            $0.leading.equalTo(contentView).offset(8)
+            $0.trailing.equalTo(timeSlack.snp.leading).offset(10)
+            $0.bottom.equalTo(contentView)
         }
     }
     
