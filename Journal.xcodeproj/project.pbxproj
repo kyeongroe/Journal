@@ -23,6 +23,8 @@
 		C09992702131281A0053C3AA /* SettingsViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C099926F2131281A0053C3AA /* SettingsViewViewModel.swift */; };
 		C0999272213128860053C3AA /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0999271213128860053C3AA /* Setting.swift */; };
 		C0999274213133CB0053C3AA /* UserDefaultsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0999273213133CB0053C3AA /* UserDefaultsSettings.swift */; };
+		C099927621313DC40053C3AA /* RealmEntryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C099927521313DC40053C3AA /* RealmEntryRepository.swift */; };
+		C099927821313EF70053C3AA /* RealmEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C099927721313EF70053C3AA /* RealmEntry.swift */; };
 		C0B170842115666C002E79F4 /* EntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B170832115666C002E79F4 /* EntryType.swift */; };
 		C0F646C72102F1760098A8ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C62102F1760098A8ED /* AppDelegate.swift */; };
 		C0F646C92102F1760098A8ED /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C82102F1760098A8ED /* EntryViewController.swift */; };
@@ -66,6 +68,8 @@
 		C099926F2131281A0053C3AA /* SettingsViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewViewModel.swift; sourceTree = "<group>"; };
 		C0999271213128860053C3AA /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		C0999273213133CB0053C3AA /* UserDefaultsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsSettings.swift; sourceTree = "<group>"; };
+		C099927521313DC40053C3AA /* RealmEntryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmEntryRepository.swift; sourceTree = "<group>"; };
+		C099927721313EF70053C3AA /* RealmEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmEntry.swift; sourceTree = "<group>"; };
 		C0B170832115666C002E79F4 /* EntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryType.swift; sourceTree = "<group>"; };
 		C0F646C32102F1760098A8ED /* Journal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Journal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F646C62102F1760098A8ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -211,6 +215,8 @@
 				C024586C211540A50092E9BE /* Identifiable.swift */,
 				C0B170832115666C002E79F4 /* EntryType.swift */,
 				C0999271213128860053C3AA /* Setting.swift */,
+				C099927521313DC40053C3AA /* RealmEntryRepository.swift */,
+				C099927721313EF70053C3AA /* RealmEntry.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -371,10 +377,14 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Journal/Pods-Journal-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
+				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -413,8 +423,10 @@
 				C0B170842115666C002E79F4 /* EntryType.swift in Sources */,
 				C0FAA991210C4B8700CCD915 /* Entry.swift in Sources */,
 				C0999272213128860053C3AA /* Setting.swift in Sources */,
+				C099927821313EF70053C3AA /* RealmEntry.swift in Sources */,
 				C024586D211540A50092E9BE /* Identifiable.swift in Sources */,
 				C09992682130F2840053C3AA /* EntryViewViewModel.swift in Sources */,
+				C099927621313DC40053C3AA /* RealmEntryRepository.swift in Sources */,
 				C0839D58211EC5BA00E9258F /* UIKit+Journal.swift in Sources */,
 				C0014AD4211F1EB20072BC4C /* Environment.swift in Sources */,
 				C024586B21153C590092E9BE /* EntryRepository.swift in Sources */,

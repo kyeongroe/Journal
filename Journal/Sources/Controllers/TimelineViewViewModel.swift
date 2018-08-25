@@ -16,11 +16,11 @@ class TimelineViewViewModel {
         return "Jounal"
     }
     private var dates: [Date]
-    private var entries: [Entry] { return environment.entryRepository.allEntries }
-    private func entries(for day: Date) -> [Entry] {
+    private var entries: [EntryType] { return environment.entryRepository.allEntries }
+    private func entries(for day: Date) -> [EntryType] {
         return entries.filter { $0.createdAt.hmsRemoved == day }
     }
-    private func entry(for indexPath: IndexPath) -> Entry {
+    private func entry(for indexPath: IndexPath) -> EntryType {
         return entries(for: dates[indexPath.section])[indexPath.row]
     }
     init(environment: Environment) {
@@ -30,11 +30,26 @@ class TimelineViewViewModel {
             .unique()
     }
     
+    func numberOfRows(in section: Int) -> Int {
+        let date = dates[section]
+        return entries(for: date).count
+    }
+    
     var numberOfDates: Int { return dates.count }
+    
     func headerTitle(of section: Int) -> String {
         let df = DateFormatter.formatter(with: environment.settings.dateFormat.rawValue)
         return df.string(from: dates[section])
     }
+    
+    var numberOfSections: Int { return dates.count }
+    
+    func title(for section: Int) -> String {
+        let date = dates[section]
+        return DateFormatter.formatter(with: environment.settings.dateFormat.rawValue)
+            .string(from: date)
+    }
+    
     func numberOfItems(of section: Int) -> Int {
         return entries(for: dates[section]).count
     }
@@ -58,24 +73,35 @@ class TimelineViewViewModel {
     lazy var settingsViewModel: SettingsTableViewViewModel = SettingsTableViewViewModel(environment: environment)
     
     func removeEntry(at indexPath: IndexPath) {
-        let isLastEntryInSection = numberOfItems(of: indexPath.section) == 1
-        let entryToRemove = entry(for: indexPath)
-        self.environment.entryRepository.remove(entryToRemove)
-        if isLastEntryInSection { self.dates = self.dates.filter { $0 != entryToRemove.createdAt.hmsRemoved } }
+//        let isLastEntryInSection = numberOfItems(of: indexPath.section) == 1
+//        let entryToRemove = entry(for: indexPath)
+//        self.environment.entryRepository.remove(entryToRemove)
+//        if isLastEntryInSection {
+//            self.dates = self.dates.filter { $0 != entryToRemove.createdAt.hmsRemoved }
+//        }
+        
+        let date = dates[indexPath.section]
+        let entries = self.entries(for: date)
+        let entry = entries[indexPath.row]
+        environment.entryRepository.remove(entry)
+        
+        if entries.count == 1 {
+            dates = self.dates.filter { $0 != date }
+        }
     }
 }
 
 extension TimelineViewViewModel: EntryViewViewModelDelegate {
-    func didAddEntry(_ entry: Entry) {
+    func didAddEntry(_ entry: EntryType) {
         dates = environment.entryRepository.uniqueDates
     }
-    func didRemoveEntry(_ entry: Entry) {
+    func didRemoveEntry(_ entry: EntryType) {
         dates = environment.entryRepository.uniqueDates
     }
 }
 
 extension EntryRepository {
-    var allEntries: [Entry] {
+    var allEntries: [EntryType] {
         return recentEntries(max: numberOfEntries)
     }
     

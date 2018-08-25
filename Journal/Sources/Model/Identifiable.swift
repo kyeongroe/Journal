@@ -12,7 +12,7 @@ protocol Identifiable {
     var id: UUID { get }
 }
 extension Identifiable {
-    func isIdentical(to other: Self) -> Bool {
+    func isIdentical(to other: Identifiable) -> Bool {
         return id == other.id
     }
 }

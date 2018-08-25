@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -36,18 +37,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let timelineViewController = navViewController.topViewController as? TimelineViewController
             else { return }
         
-        let entries: [Entry] = [ // 어제
-            Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"),
-            // 2일 전
-            Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"),
-            // 3일 전
-            Entry(createdAt: Date.before(3), text: "3일 전 일기"), Entry(createdAt: Date.before(3), text: "3일 전 일기")
-        ]
-        let entryRepo = InMemoryEntryRepository(entries: entries)
+//        let entries: [Entry] = [ // 어제
+//            Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"), Entry(createdAt: Date.before(1), text: "어제 일기"),
+//            // 2일 전
+//            Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"), Entry(createdAt: Date.before(2), text: "2일 전 일기"),
+//            // 3일 전
+//            Entry(createdAt: Date.before(3), text: "3일 전 일기"), Entry(createdAt: Date.before(3), text: "3일 전 일기")
+//        ]
+        let realm = try! Realm()
+//        let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "MyInMemoryRealm"))
+        let realmEntryRepo = RealmEntryRepository(realm: realm)
+        let env = Environment(
+            entryRepository: realmEntryRepo,
+            entryFactory: { text in
+                let entry = RealmEntry()
+                entry.uuidString = UUID().uuidString
+                entry.createdAt = Date()
+                entry.text = text
+                return entry
+        },
+            settings: UserDefaults.standard)
         
-        timelineViewController.viewModel = TimelineViewViewModel(environment: Environment(entryRepository: entryRepo))
-//        timelineViewController.environment = Environment(entryRepository: entryRepo)
-//        timelineViewController.environment = Environment()
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+        
+        timelineViewController.viewModel = TimelineViewViewModel(environment: env)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {

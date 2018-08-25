@@ -11,19 +11,19 @@ import Foundation
 protocol EntryRepository {
     
     var numberOfEntries: Int { get }
-    func add(_ entry: Entry)
-    func update(_ entry: Entry)
-    func remove(_ entry: Entry)
-    func entry(with id: UUID) -> Entry?
-    func recentEntries(max: Int) -> [Entry]
+    func add(_ entry: EntryType)
+    func update(_ entry: EntryType)
+    func remove(_ entry: EntryType)
+    func entry(with id: UUID) -> EntryType?
+    func recentEntries(max: Int) -> [EntryType]
 }
 
 class InMemoryEntryRepository: EntryRepository {
     
-    private var entries: [UUID: Entry]
+    private var entries: [UUID: EntryType]
     
-    init(entries: [Entry] = []) {
-        var result: [UUID: Entry] = [:]
+    init(entries: [EntryType] = []) {
+        var result: [UUID: EntryType] = [:]
         entries.forEach { entry in
             result[entry.id] = entry
         }
@@ -32,23 +32,23 @@ class InMemoryEntryRepository: EntryRepository {
     
     var numberOfEntries: Int { return entries.count }
     
-    func add(_ entry: Entry) {
+    func add(_ entry: EntryType) {
         entries[entry.id] = entry
     }
     
-    func update(_ entry: Entry) {
+    func update(_ entry: EntryType) {
         entries[entry.id] = entry
     }
     
-    func remove(_ entry: Entry) {
+    func remove(_ entry: EntryType) {
         entries[entry.id] = nil
     }
     
-    func entry(with id: UUID) -> Entry? {
+    func entry(with id: UUID) -> EntryType? {
         return entries[id]
     }
     
-    func recentEntries(max: Int) -> [Entry] {
+    func recentEntries(max: Int) -> [EntryType] {
         
         if max < 0 {
             return [];

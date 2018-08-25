@@ -9,8 +9,8 @@
 import UIKit
 
 protocol EntryViewViewModelDelegate: class {
-    func didAddEntry(_ entry: Entry)
-    func didRemoveEntry(_ entry: Entry)
+    func didAddEntry(_ entry: EntryType)
+    func didRemoveEntry(_ entry: EntryType)
 }
 
 class EntryViewViewModel {
@@ -18,8 +18,8 @@ class EntryViewViewModel {
     weak var delegate: EntryViewViewModelDelegate?
     
     private let environment: Environment
-    private var entry: Entry?
-    init(environment: Environment, entry: Entry? = nil) {
+    private var entry: EntryType?
+    init(environment: Environment, entry: EntryType? = nil) {
         self.environment = environment
         self.entry = entry
     }
@@ -42,18 +42,18 @@ class EntryViewViewModel {
         isEditing = true
     }
     func completeEditing(with text: String) {
-        if let oldEntry = self.entry {
+        if var oldEntry = self.entry {
             oldEntry.text = text
             environment.entryRepository.update(oldEntry)
         } else {
-            let newEntry: Entry = Entry(text: text)
+            let newEntry: EntryType = environment.entryFactory(text)
             environment.entryRepository.add(newEntry)
             delegate?.didAddEntry(newEntry)
             entry = newEntry
         }
         isEditing = false
     }
-    func removeEntry() -> Entry? {
+    func removeEntry() -> EntryType? {
         guard let entryToRemove = entry else { return nil }
         self.environment.entryRepository.remove(entryToRemove)
         self.entry = nil

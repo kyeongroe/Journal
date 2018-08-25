@@ -26,16 +26,18 @@ enum FontSizeOption: CGFloat, SettingOption, CustomStringConvertible {
     case small = 14
     case medium = 16
     case large = 18
+    case xlarge = 24
     var description: String {
         switch self {
         case .small: return "Small"
         case .medium: return "Medium"
         case .large: return "Large"
+        case .xlarge: return "XLarge"
         }
     }
     static var name: String { return "글자 크기" }
     static var `default`: FontSizeOption { return .medium }
-    static var all: [FontSizeOption] { return [.small, .medium, .large] }
+    static var all: [FontSizeOption] { return [.small, .medium, .large, .xlarge] }
 }
 
 protocol Settings {

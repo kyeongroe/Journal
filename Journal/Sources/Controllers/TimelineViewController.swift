@@ -140,7 +140,7 @@ extension TimelineViewController: UITableViewDelegate {
 }
 
 struct EntryTableViewCellModel {
-    let entry: Entry
+    let entry: EntryType
     let environment: Environment
     var entryText: String { return entry.text }
     var entryTextFont: UIFont { return UIFont.systemFont(ofSize: environment.settings.fontSize.rawValue) }
@@ -152,8 +152,8 @@ class EntryTableViewCell: UITableViewCell {
     let entryTextLabel = UILabel()
     let timeLabel = UILabel()
     let ampmLabel = UILabel()
-    let titleSlack = UIStackView()
-    let timeSlack = UIStackView()
+    let titleStack = UIStackView()
+    let timeStack = UIStackView()
     
     var viewModel: EntryTableViewCellModel? {
         didSet {
@@ -166,26 +166,28 @@ class EntryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        timeSlack.translatesAutoresizingMaskIntoConstraints = false
-        timeSlack.axis = .horizontal
-        timeSlack.distribution = .fillEqually
-        timeSlack.alignment = .center
-        timeSlack.spacing = 5
+        timeStack.axis = .vertical
+        timeStack.distribution = .fillEqually
+        timeStack.alignment = .center
+        timeStack.spacing = 5
         
-        timeSlack.addSubview(timeLabel)
-        timeSlack.addSubview(ampmLabel)
+        timeStack.addSubview(timeLabel)
+        timeStack.addSubview(ampmLabel)
         
-        titleSlack.addSubview(entryTextLabel)
+        titleStack.addSubview(entryTextLabel)
         
-        titleSlack.addSubview(timeSlack)
+        titleStack.addSubview(timeStack)
         
-        titleSlack.translatesAutoresizingMaskIntoConstraints = false
-        titleSlack.axis = .vertical
-        titleSlack.distribution = .fillEqually
-        titleSlack.alignment = .fill
-        titleSlack.spacing = 5
+        titleStack.axis = .vertical
+        titleStack.distribution = .fillEqually
+        titleStack.alignment = .fill
+        titleStack.spacing = 5
         
-        contentView.addSubview(titleSlack)
+        contentView.addSubview(titleStack)
+        
+        ampmLabel.backgroundColor = .red
+        entryTextLabel.backgroundColor = .yellow
+        timeLabel.backgroundColor = .blue
         
         ampmLabel.snp.makeConstraints {
             $0.height.equalTo(40)
@@ -200,18 +202,18 @@ class EntryTableViewCell: UITableViewCell {
             $0.height.equalTo(40)
         }
         
-        timeSlack.snp.makeConstraints {
+        timeStack.snp.makeConstraints {
             $0.top.equalTo(contentView)
-            $0.trailing.equalTo(contentView).offset(8)
+            $0.trailing.equalTo(titleStack).offset(8)
             $0.bottom.equalTo(contentView)
             $0.height.equalTo(80)
             $0.width.equalTo(80)
         }
         
-        titleSlack.snp.makeConstraints {
+        titleStack.snp.makeConstraints {
             $0.top.equalTo(contentView)
             $0.leading.equalTo(contentView).offset(8)
-            $0.trailing.equalTo(timeSlack.snp.leading).offset(10)
+            $0.trailing.equalTo(timeStack.snp.leading).offset(10)
             $0.bottom.equalTo(contentView)
         }
     }
