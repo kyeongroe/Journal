@@ -15,20 +15,14 @@ class TimelineViewController: UIViewController {
     
     var tableview: UITableView!
     
-    var environment: Environment!
-    
-    private var dates: [Date] = []
-    
-    private var entries: [Entry] {
-        return environment.entryRepository.recentEntries(max: environment.entryRepository.numberOfEntries)
-    }
-    
+    var viewModel: TimelineViewViewModel!
+
     override func viewDidLoad() {
         
         addButton.image = #imageLiteral(resourceName: "baseline_add_white_24pt")
         
         super.viewDidLoad()
-        title = "Journal"
+        title = viewModel.title
         
         tableview = UITableView()
         
@@ -54,39 +48,99 @@ class TimelineViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        dates = entries
-            .compactMap { $0.createdAt.hmsRemoved }
-            .unique()
-        
         tableview.reloadData()
-    }
-    
-    private func entries(for day: Date) -> [Entry] {
-        return entries.filter { $0.createdAt.hmsRemoved == day }
-    }
-    private func entry(for indexPath: IndexPath) -> Entry {
-        return entries(for: dates[indexPath.section])[indexPath.row]
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case .some("addEntry"):
             if let vc = segue.destination as? EntryViewController {
-                vc.environment = environment
-                vc.delegate = self
+                vc.viewModel = viewModel.newEntryViewViewModel()
             }
         case .some("showEntry"):
             if
                 let vc = segue.destination as? EntryViewController,
                 let selectedIP = tableview.indexPathForSelectedRow {
-                vc.environment = environment
-                vc.editingEntry = entries[selectedIP.row]
-                vc.delegate = self
+                vc.viewModel = viewModel.entryViewModel(for: selectedIP)
             }
         default:
             break
         }
     }
+}
+
+extension TimelineViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return viewModel.numberOfDates
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return viewModel.headerTitle(of: section)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfItems(of: section)
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableview.dequeueReusableCell(withIdentifier: "EntryCell", for: indexPath) as! EntryTableViewCell
+        cell.viewModel = viewModel.entryTableViewCellModel(for: indexPath)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        let vc = storyboard.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
+        vc.viewModel = viewModel.entryViewModel(for: indexPath)
+
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension TimelineViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .normal, title:  nil) { (ac:UIContextualAction, view:UIView, success:@escaping (Bool) -> Void) in
+            
+            let alertController = UIAlertController.init(title: "일기를 제거하겠습니까?", message: "이 작업은 되돌릴 수 없습니다", preferredStyle: .alert)
+            let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
+                let isLastEntryInSection = self.viewModel.numberOfItems(of: indexPath.section) == 1
+                self.viewModel.removeEntry(at: indexPath)
+                
+                UIView.animate(withDuration: 0.3) {
+                    tableView.beginUpdates()
+                    if isLastEntryInSection {
+                        tableView.deleteSections(IndexSet.init(integer: indexPath.section), with: .automatic)
+                    } else {
+                        tableView.deleteRows(at: [indexPath], with: .automatic)
+                    }
+                    tableView.endUpdates()
+                }
+                success(true)
+            }
+            alertController.addAction(deleteAction)
+            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            
+            alertController.addAction(cancelAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            
+        }
+        deleteAction.image = #imageLiteral(resourceName: "baseline_delete_white_24pt")
+        deleteAction.backgroundColor = UIColor.gradientEnd
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+}
+
+
+struct EntryTableViewCellViewModel {
+    let entry: Entry
+    var entryText: String { return entry.text }
+    var createdDateText: String { return DateFormatter.timeFormatter.string(from: entry.createdAt) }
+    var ampmText: String { return DateFormatter.ampmFormatter.string(from: entry.createdAt) }
 }
 
 class EntryTableViewCell: UITableViewCell {
@@ -96,9 +150,17 @@ class EntryTableViewCell: UITableViewCell {
     let titleSlack = UIStackView()
     let timeSlack = UIStackView()
     
+    var viewModel: EntryTableViewCellViewModel? {
+        didSet {
+            entryTextLabel.text = viewModel?.entryText
+            timeLabel.text = viewModel?.createdDateText
+            ampmLabel.text = viewModel?.ampmText
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-    
+        
         timeSlack.translatesAutoresizingMaskIntoConstraints = false
         timeSlack.axis = .horizontal
         timeSlack.distribution = .fillEqually
@@ -132,7 +194,7 @@ class EntryTableViewCell: UITableViewCell {
             $0.top.equalTo(ampmLabel.snp.bottom)
             $0.height.equalTo(40)
         }
-    
+        
         timeSlack.snp.makeConstraints {
             $0.top.equalTo(contentView)
             $0.trailing.equalTo(contentView).offset(8)
@@ -140,7 +202,7 @@ class EntryTableViewCell: UITableViewCell {
             $0.height.equalTo(80)
             $0.width.equalTo(80)
         }
-
+        
         titleSlack.snp.makeConstraints {
             $0.top.equalTo(contentView)
             $0.leading.equalTo(contentView).offset(8)
@@ -151,87 +213,5 @@ class EntryTableViewCell: UITableViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-}
-
-extension TimelineViewController: UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return dates.count
-    }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return DateFormatter.entryDateFormatter.string(from: dates[section])
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return entries(for: dates[section]).count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableview.dequeueReusableCell(withIdentifier: "EntryCell", for: indexPath) as! EntryTableViewCell
-        
-        let entry = self.entry(for: indexPath)
-        
-        cell.entryTextLabel.text = "\(entry.text)"
-        cell.ampmLabel.text = DateFormatter.ampmFormatter.string(from: entry.createdAt)
-        cell.timeLabel.text = DateFormatter.timeFormatter.string(from: entry.createdAt)
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let vc = storyboard.instantiateViewController(withIdentifier: "EntryViewController") as! EntryViewController
-        
-        vc.environment = environment
-        vc.editingEntry = self.entry(for: indexPath)
-        vc.delegate = self
-
-        navigationController?.pushViewController(vc, animated: true)
-    }
-}
-
-extension TimelineViewController: EntryViewControllerDelegate {
-    func didRemoveEntry(_ entry: Entry) {
-        navigationController?.popViewController(animated: true)
-    }
-}
-
-extension TimelineViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .normal, title:  nil) { (ac:UIContextualAction, view:UIView, success:@escaping (Bool) -> Void) in
-            let date = self.dates[indexPath.section]
-            let entries = self.entries(for: date)
-            let entryToRemove = entries[indexPath.row]
-            
-            let alertController = UIAlertController.init(title: "일기를 제거하겠습니까?", message: "이 작업은 되돌릴 수 없습니다", preferredStyle: .alert)
-            let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
-                self.environment.entryRepository.remove(entryToRemove)
-                if entries.count == 1 { self.dates = self.dates.filter { $0 != date } }
-                UIView.animate(withDuration: 0.3) {
-                    tableView.beginUpdates()
-                    if entries.count == 1 {
-                        tableView.deleteSections(IndexSet.init(integer: indexPath.section), with: .automatic)
-                    } else {
-                        tableView.deleteRows(at: [indexPath], with: .automatic)
-                    }
-                    tableView.endUpdates()
-                }
-                success(true)
-            }
-            alertController.addAction(deleteAction)
-            let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-            
-            alertController.addAction(cancelAction)
-            self.present(alertController, animated: true, completion: nil)
-            
-            
-        }
-        deleteAction.image = #imageLiteral(resourceName: "baseline_delete_white_24pt")
-        deleteAction.backgroundColor = UIColor.gradientEnd
-        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }

@@ -9,38 +9,30 @@
 import UIKit
 import SnapKit
 
-protocol EntryViewControllerDelegate: class {
-    func didRemoveEntry(_ entry: Entry)
-}
-
 class EntryViewController: UIViewController {
     
     @IBOutlet weak var button: UIBarButtonItem!
     @IBOutlet weak var removeButton: UIBarButtonItem!
-    var editingEntry: Entry?
-    
-    weak var delegate: EntryViewControllerDelegate?
+
+    var viewModel: EntryViewViewModel!
     
     private var textView: UITextView!
     
-    var environment: Environment!
-    
-    var hasEntry: Bool { return editingEntry != nil }
-    
     override func viewDidLoad() {
+
         super.viewDidLoad()
         
-        removeButton.isEnabled = hasEntry
+        removeButton.isEnabled = viewModel.hasEntry
         
         title = DateFormatter.entryDateFormatter.string(from: Date())
         
         self.textView = UITextView()
         
-        textView.text = editingEntry?.text
-        let date = editingEntry?.createdAt ?? Date()
-        title = DateFormatter.entryDateFormatter.string(from: date)
+        textView.text = viewModel.textViewText
+
+        title = viewModel.title
         
-        updateSubView(for: editingEntry == nil)
+        updateSubviews(viewModel: viewModel)
         
         view.addSubview(self.textView)
         
@@ -56,6 +48,7 @@ class EntryViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if viewModel.isEditing { textView.becomeFirstResponder() }
     }
     
     @objc private func handleKeyboardAppearance(note: Notification) {
@@ -77,50 +70,45 @@ class EntryViewController: UIViewController {
                 self.textView.snp.updateConstraints {
                     $0.bottom.equalToSuperview().offset(-keyboardHeight)
                 }
-        },
+            },
             completion: nil
         )
     }
     
     @IBAction func removeEntry(_ sender: Any) {
-        guard let entryToRemove = editingEntry else { return }
-        
+        guard viewModel.hasEntry else { return }
         let alertController = UIAlertController.init(title: "일기를 제거하겠습니까?", message: "이 작업은 되돌릴 수 없습니다", preferredStyle: .alert)
-        let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (action) in
-            self.environment.entryRepository.remove(entryToRemove)
+        let deleteAction = UIAlertAction(title: "확인", style: .destructive) { (_) in
+            guard
+                let _ = self.viewModel.removeEntry()
+                else { return }
+            // pop
             self.navigationController?.popViewController(animated: true)
         }
         alertController.addAction(deleteAction)
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        
         alertController.addAction(cancelAction)
         present(alertController, animated: true, completion: nil)
     }
-    private func updateSubView(for isEditing: Bool) {
-        button.image = isEditing ? #imageLiteral(resourceName: "baseline_save_white_24pt") : #imageLiteral(resourceName: "baseline_edit_white_24pt")
-        
+    
+    private func updateSubviews(viewModel: EntryViewViewModel) {
+        removeButton.isEnabled = viewModel.trashIconEnabled
+        button.image = viewModel.buttonImage
         button.target = self
-        button.action = isEditing ? #selector(saveEntry(_:)) : #selector(editEntry)
-        self.textView.isEditable = isEditing
-        _ = isEditing ? self.textView.becomeFirstResponder() : self.textView.resignFirstResponder()
+        button.action = viewModel.isEditing ? #selector(saveEntry(_:)) : #selector(editEntry)
+        textView.isEditable = viewModel.textViewEditable
     }
     
     @objc func saveEntry(_ sender: Any) {
-        if let oldEntry = self.editingEntry {
-            oldEntry.text = self.textView.text
-            environment.entryRepository.update(oldEntry)
-        } else {
-            let newEntry: Entry = Entry(text: self.textView.text)
-            environment.entryRepository.add(newEntry)
-            editingEntry = newEntry
-            removeButton.isEnabled = true
-        }
-
-        updateSubView(for: false)
+        viewModel.completeEditing(with: textView.text)
+        updateSubviews(viewModel: viewModel)
+        textView.resignFirstResponder()
     }
     
     @objc func editEntry(_ sender: Any) {
-        updateSubView(for: true)
+        viewModel.startEditing()
+        updateSubviews(viewModel: viewModel)
+        textView.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {

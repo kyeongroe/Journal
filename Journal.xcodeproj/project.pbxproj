@@ -16,6 +16,9 @@
 		C03986A2211F173A0040BCF5 /* TimelineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03986A1211F173A0040BCF5 /* TimelineViewController.swift */; };
 		C042C2372119A6B900B667A2 /* EntryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C042C2362119A6B900B667A2 /* EntryTests.swift */; };
 		C0839D58211EC5BA00E9258F /* UIKit+Journal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0839D57211EC5BA00E9258F /* UIKit+Journal.swift */; };
+		C09992682130F2840053C3AA /* EntryViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09992672130F2840053C3AA /* EntryViewViewModel.swift */; };
+		C099926A2130F3AF0053C3AA /* EntryViewViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09992692130F3AF0053C3AA /* EntryViewViewModelTests.swift */; };
+		C099926C2130FB1B0053C3AA /* TimelineViewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C099926B2130FB1B0053C3AA /* TimelineViewViewModel.swift */; };
 		C0B170842115666C002E79F4 /* EntryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B170832115666C002E79F4 /* EntryType.swift */; };
 		C0F646C72102F1760098A8ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C62102F1760098A8ED /* AppDelegate.swift */; };
 		C0F646C92102F1760098A8ED /* EntryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F646C82102F1760098A8ED /* EntryViewController.swift */; };
@@ -52,6 +55,9 @@
 		C03986A1211F173A0040BCF5 /* TimelineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewController.swift; sourceTree = "<group>"; };
 		C042C2362119A6B900B667A2 /* EntryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryTests.swift; sourceTree = "<group>"; };
 		C0839D57211EC5BA00E9258F /* UIKit+Journal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIKit+Journal.swift"; sourceTree = "<group>"; };
+		C09992672130F2840053C3AA /* EntryViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewViewModel.swift; sourceTree = "<group>"; };
+		C09992692130F3AF0053C3AA /* EntryViewViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryViewViewModelTests.swift; sourceTree = "<group>"; };
+		C099926B2130FB1B0053C3AA /* TimelineViewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewViewModel.swift; sourceTree = "<group>"; };
 		C0B170832115666C002E79F4 /* EntryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntryType.swift; sourceTree = "<group>"; };
 		C0F646C32102F1760098A8ED /* Journal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Journal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F646C62102F1760098A8ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -191,6 +197,8 @@
 				C024586A21153C590092E9BE /* EntryRepository.swift */,
 				C024586C211540A50092E9BE /* Identifiable.swift */,
 				C0B170832115666C002E79F4 /* EntryType.swift */,
+				C09992672130F2840053C3AA /* EntryViewViewModel.swift */,
+				C099926B2130FB1B0053C3AA /* TimelineViewViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,6 +210,7 @@
 				C0FAA99C210C57CC00CCD915 /* Info.plist */,
 				C042C2362119A6B900B667A2 /* EntryTests.swift */,
 				C02FA7F82127BA1A00CB235C /* TimelineViewControllerTests.swift */,
+				C09992692130F3AF0053C3AA /* EntryViewViewModelTests.swift */,
 			);
 			path = JournalTests;
 			sourceTree = "<group>";
@@ -387,9 +396,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C02FA7FB2127F9FC00CB235C /* Foundation+Journal.swift in Sources */,
+				C099926C2130FB1B0053C3AA /* TimelineViewViewModel.swift in Sources */,
 				C0B170842115666C002E79F4 /* EntryType.swift in Sources */,
 				C0FAA991210C4B8700CCD915 /* Entry.swift in Sources */,
 				C024586D211540A50092E9BE /* Identifiable.swift in Sources */,
+				C09992682130F2840053C3AA /* EntryViewViewModel.swift in Sources */,
 				C0839D58211EC5BA00E9258F /* UIKit+Journal.swift in Sources */,
 				C0014AD4211F1EB20072BC4C /* Environment.swift in Sources */,
 				C024586B21153C590092E9BE /* EntryRepository.swift in Sources */,
@@ -403,6 +414,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C099926A2130F3AF0053C3AA /* EntryViewViewModelTests.swift in Sources */,
 				C02FA7F92127BA1A00CB235C /* TimelineViewControllerTests.swift in Sources */,
 				C042C2372119A6B900B667A2 /* EntryTests.swift in Sources */,
 				C0FAA99B210C57CC00CCD915 /* JournalTests.swift in Sources */,
