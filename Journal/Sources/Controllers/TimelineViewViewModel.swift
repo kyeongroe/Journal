@@ -12,6 +12,22 @@ class TimelineViewViewModel {
 
     let environment: Environment
     
+    private var filteredEntries: [EntryType] = []
+    
+    var searchText: String? {
+        didSet {
+            guard let text = searchText else {
+                filteredEntries = []
+                return
+            }
+            filteredEntries = environment.entryRepository.entries(contains: text)
+        }
+    }
+    
+    var isSearching: Bool {
+        return searchText?.isEmpty == false
+    }
+    
     var title: String {
         return "Jounal"
     }
@@ -20,9 +36,13 @@ class TimelineViewViewModel {
     private func entries(for day: Date) -> [EntryType] {
         return entries.filter { $0.createdAt.hmsRemoved == day }
     }
+    
     private func entry(for indexPath: IndexPath) -> EntryType {
-        return entries(for: dates[indexPath.section])[indexPath.row]
+        return isSearching
+            ? filteredEntries[indexPath.row]
+            : entries(for: dates[indexPath.section])[indexPath.row]
     }
+    
     init(environment: Environment) {
         self.environment = environment
         self.dates = environment.entryRepository.allEntries
@@ -37,12 +57,15 @@ class TimelineViewViewModel {
     
     var numberOfDates: Int { return dates.count }
     
-    func headerTitle(of section: Int) -> String {
+    func headerTitle(of section: Int) -> String? {
+        guard isSearching == false else { return nil }
         let df = DateFormatter.formatter(with: environment.settings.dateFormat.rawValue)
         return df.string(from: dates[section])
     }
     
-    var numberOfSections: Int { return dates.count }
+    var numberOfSections: Int {
+        return isSearching ? 1 : dates.count
+    }
     
     func title(for section: Int) -> String {
         let date = dates[section]
@@ -51,12 +74,13 @@ class TimelineViewViewModel {
     }
     
     func numberOfItems(of section: Int) -> Int {
-        return entries(for: dates[section]).count
+        return isSearching
+            ? filteredEntries.count
+            : entries(for: dates[section]).count
     }
     
     func entryTableViewCellModel(for indexPath: IndexPath) -> EntryTableViewCellModel {
-        let entry = self.entry(for: indexPath)
-        return EntryTableViewCellModel(entry: entry, environment: environment)
+        return EntryTableViewCellModel(entry: entry(for: indexPath), environment: environment)
     }
     
     func newEntryViewViewModel() -> EntryViewViewModel {

@@ -16,6 +16,8 @@ class TimelineViewController: UIViewController {
     var tableview: UITableView!
     
     var viewModel: TimelineViewViewModel!
+    
+    private let searchController: UISearchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         
@@ -43,12 +45,29 @@ class TimelineViewController: UIViewController {
         tableview.delegate = self
         
         tableview.reloadData()
+        
+        searchController.searchBar.placeholder = "일기 검색"
+        searchController.searchBar.tintColor = .white
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        
+        definesPresentationContext = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         tableview.reloadData()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if viewModel.isSearching {
+            viewModel.searchText = nil
+            searchController.isActive = false
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -71,6 +90,17 @@ class TimelineViewController: UIViewController {
         default:
             break
         }
+    }
+}
+
+extension TimelineViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard
+            let searchText = searchController.searchBar.text,
+            searchText.isEmpty == false
+            else { return }
+        viewModel.searchText = searchText
+        tableview.reloadData()
     }
 }
 
@@ -153,8 +183,8 @@ class EntryTableViewCell: UITableViewCell {
     let entryTextLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
     let timeLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
     let ampmLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
-    let titleStack = UIStackView(frame: CGRect(x: 0,y: 20,width: 100,height: 40))
-    let timeStack = UIStackView(frame: CGRect(x: 0,y: 20,width: 100,height: 40))
+    let titleStack = UIStackView()
+    let timeStack = UIStackView()
     
     var viewModel: EntryTableViewCellModel? {
         didSet {
@@ -167,30 +197,34 @@ class EntryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        titleStack.backgroundColor = .red
+//        titleStack.backgroundColor = .red
+//
+//        timeStack.backgroundColor = .blue
+//
+//        timeStack.axis = .vertical
+//        timeStack.alignment = .center
+//        timeStack.distribution = .fill
+//        timeStack.spacing = 0
+//
+//        timeStack.addSubview(timeLabel)
+//        timeStack.addSubview(ampmLabel)
+//
+//        titleStack.addSubview(entryTextLabel)
+//
+//        titleStack.addSubview(timeStack)
+//
+//        titleStack.axis = .horizontal
+//        titleStack.alignment = .center
+//        titleStack.distribution = .fill
+//        titleStack.spacing = 0
         
-        timeStack.axis = .vertical
-        timeStack.alignment = .center
-        timeStack.distribution = .fill
-        timeStack.spacing = 0
-        
-        timeStack.addSubview(timeLabel)
-        timeStack.addSubview(ampmLabel)
-        
-        titleStack.addSubview(entryTextLabel)
-        
-        titleStack.addSubview(timeStack)
-        
-        titleStack.axis = .horizontal
-        titleStack.alignment = .center
-        titleStack.distribution = .fill
-        titleStack.spacing = 0
-        
-        contentView.addSubview(titleStack)
-        
-        contentView.snp.makeConstraints {
-            $0.trailing.equalTo(timeStack).offset(8)
-        }
+//        contentView.addSubview(titleStack)
+        contentView.addSubview(entryTextLabel)
+        contentView.addSubview(timeLabel)
+
+//        contentView.snp.makeConstraints {
+//            $0.trailing.equalTo(timeLabel).offset(8)
+//        }
         
 //        ampmLabel.backgroundColor = .red
 //        entryTextLabel.backgroundColor = .yellow
@@ -201,35 +235,34 @@ class EntryTableViewCell: UITableViewCell {
 //        }
 
         entryTextLabel.snp.makeConstraints {
-//            $0.height.equalTo(40)
-            $0.centerY.equalTo(titleStack)
+            $0.centerY.equalTo(contentView)
         }
 
-//        timeLabel.snp.makeConstraints {
-//            $0.top.equalTo(ampmLabel.snp.bottom)
-//            $0.height.equalTo(40)
-//        }
-        
-        timeStack.snp.makeConstraints {
-            $0.top.bottom.equalTo(titleStack)
+        timeLabel.snp.makeConstraints {
+            $0.centerY.equalTo(contentView)
+            $0.trailing.equalTo(contentView).offset(-8)
             $0.width.equalTo(80)
-//            $0.leading.equalTo(titleStack.snp.trailing)
-//            $0.trailing.equalToSuperview()
+//            $0.leading.equalTo(entryTextLabel.snp.trailing)
         }
         
-        titleStack.snp.makeConstraints {
-            $0.top.equalTo(contentView).offset(20)
-            $0.left.equalTo(contentView).offset(20)
-            $0.bottom.equalTo(contentView).offset(-20)
-            $0.right.equalTo(contentView).offset(-20)
-            
+//        timeStack.snp.makeConstraints {
+//            $0.top.bottom.equalTo(titleStack)
+//            $0.width.equalTo(80)
+//            $0.leading.equalTo(titleStack.snp.trailing)
+//            $0.trailing.equalToSuperview()
+//        }
+        
+//        titleStack.snp.makeConstraints {
+//            $0.left.equalTo(contentView).offset(8)
+//            $0.right.equalTo(contentView).offset(-8)
+        
 //            $0.edges.equalTo(contentView).inset(UIEdgeInsetsMake(20, 20, 20, 20))
 //            $0.top.bottom.equalTo(self.contentView)
 //            $0.centerY.equalTo(self.contentView)
 //            $0.leading.equalTo(self.contentView).offset(8)
 //            $0.height.equalTo(80)
 //            $0.width.equalTo(80)
-        }
+//        }
     }
     
     required init?(coder aDecoder: NSCoder) {
