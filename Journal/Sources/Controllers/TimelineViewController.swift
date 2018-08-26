@@ -149,11 +149,12 @@ struct EntryTableViewCellModel {
 }
 
 class EntryTableViewCell: UITableViewCell {
-    let entryTextLabel = UILabel()
-    let timeLabel = UILabel()
-    let ampmLabel = UILabel()
-    let titleStack = UIStackView()
-    let timeStack = UIStackView()
+    
+    let entryTextLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
+    let timeLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
+    let ampmLabel = UILabel(frame: CGRect(x: 0,y: 0,width: 100,height: 20))
+    let titleStack = UIStackView(frame: CGRect(x: 0,y: 20,width: 100,height: 40))
+    let timeStack = UIStackView(frame: CGRect(x: 0,y: 20,width: 100,height: 40))
     
     var viewModel: EntryTableViewCellModel? {
         didSet {
@@ -166,9 +167,11 @@ class EntryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        titleStack.backgroundColor = .red
+        
         timeStack.axis = .vertical
-        timeStack.distribution = .fill
         timeStack.alignment = .center
+        timeStack.distribution = .fill
         timeStack.spacing = 0
         
         timeStack.addSubview(timeLabel)
@@ -178,45 +181,54 @@ class EntryTableViewCell: UITableViewCell {
         
         titleStack.addSubview(timeStack)
         
-//        titleStack.axis = .vertical
-//        titleStack.distribution = .fill
-//        titleStack.alignment = .fill
-//        titleStack.spacing = 0
+        titleStack.axis = .horizontal
+        titleStack.alignment = .center
+        titleStack.distribution = .fill
+        titleStack.spacing = 0
         
         contentView.addSubview(titleStack)
         
         contentView.snp.makeConstraints {
-            $0.height.equalTo(80)
+            $0.trailing.equalTo(timeStack).offset(8)
         }
         
-        ampmLabel.backgroundColor = .red
-        entryTextLabel.backgroundColor = .yellow
-        timeLabel.backgroundColor = .blue
+//        ampmLabel.backgroundColor = .red
+//        entryTextLabel.backgroundColor = .yellow
+//        timeLabel.backgroundColor = .blue
         
-        ampmLabel.snp.makeConstraints {
-            $0.height.equalTo(40)
-        }
+//        ampmLabel.snp.makeConstraints {
+//            $0.height.equalTo(20)
+//        }
 
         entryTextLabel.snp.makeConstraints {
-            $0.height.equalTo(40)
-            $0.centerY.equalToSuperview()
+//            $0.height.equalTo(40)
+            $0.centerY.equalTo(titleStack)
         }
 
-        timeLabel.snp.makeConstraints {
-            $0.top.equalTo(ampmLabel.snp.bottom)
-            $0.height.equalTo(40)
-        }
-        
-//        timeStack.snp.makeConstraints {
-//            $0.leading.equalTo(titleStack.snp.trailing)
-//            $0.trailing.equalToSuperview()
+//        timeLabel.snp.makeConstraints {
+//            $0.top.equalTo(ampmLabel.snp.bottom)
+//            $0.height.equalTo(40)
 //        }
         
+        timeStack.snp.makeConstraints {
+            $0.top.bottom.equalTo(titleStack)
+            $0.width.equalTo(80)
+//            $0.leading.equalTo(titleStack.snp.trailing)
+//            $0.trailing.equalToSuperview()
+        }
+        
         titleStack.snp.makeConstraints {
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview().offset(8)
-            $0.trailing.equalToSuperview().offset(8)
-            $0.height.equalTo(80)
+            $0.top.equalTo(contentView).offset(20)
+            $0.left.equalTo(contentView).offset(20)
+            $0.bottom.equalTo(contentView).offset(-20)
+            $0.right.equalTo(contentView).offset(-20)
+            
+//            $0.edges.equalTo(contentView).inset(UIEdgeInsetsMake(20, 20, 20, 20))
+//            $0.top.bottom.equalTo(self.contentView)
+//            $0.centerY.equalTo(self.contentView)
+//            $0.leading.equalTo(self.contentView).offset(8)
+//            $0.height.equalTo(80)
+//            $0.width.equalTo(80)
         }
     }
     
