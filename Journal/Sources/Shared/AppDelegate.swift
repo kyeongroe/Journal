@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var environment: Environment!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
+        
         // Override point for customization after application launch.
         if let navViewController = window?.rootViewController as? UINavigationController {
             navViewController.navigationBar.prefersLargeTitles = true
@@ -44,17 +47,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            // 3일 전
 //            Entry(createdAt: Date.before(3), text: "3일 전 일기"), Entry(createdAt: Date.before(3), text: "3일 전 일기")
 //        ]
-        let realm = try! Realm()
+//        let realm = try! Realm()
 //        let realm = try! Realm(configuration: Realm.Configuration(inMemoryIdentifier: "MyInMemoryRealm"))
-        let realmEntryRepo = RealmEntryRepository(realm: realm)
+//        let realmEntryRepo = RealmEntryRepository(realm: realm)
+        
+        let fbRepo = FirebaseEntryRepository()
+        
         let env = Environment(
-            entryRepository: realmEntryRepo,
-            entryFactory: { text in
-                let entry = RealmEntry()
-                entry.uuidString = UUID().uuidString
-                entry.createdAt = Date()
-                entry.text = text
-                return entry
+            entryRepository: fbRepo,
+            entryFactory: { Entry(text: $0)
             },
             settings: UserDefaults.standard)
         

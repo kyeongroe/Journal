@@ -15,9 +15,21 @@ protocol EntryRepository {
     func update(_ entry: EntryType)
     func remove(_ entry: EntryType)
     func entry(with id: UUID) -> EntryType?
-    func entries(contains string: String) -> [EntryType]
-    func recentEntries(max: Int) -> [EntryType]
+    func entries(contains string: String, completion: @escaping ([EntryType]) -> Void)
+    func recentEntries(max: Int, page: Int, completion: @escaping ([EntryType], Bool) -> Void)
 }
+
+//extension EntryRepository {
+//    var allEntries: [EntryType] {
+//        return recentEntries(max: numberOfEntries)
+//    }
+//
+//    var uniqueDates: [Date] {
+//        return allEntries
+//            .compactMap { $0.createdAt.hmsRemoved }
+//            .unique()
+//    }
+//}
 
 class InMemoryEntryRepository: EntryRepository {
     
@@ -49,16 +61,17 @@ class InMemoryEntryRepository: EntryRepository {
         return entries[id]
     }
     
-    func entries(contains string: String) -> [EntryType] {
-        return entries.values
+    func entries(contains string: String, completion: @escaping ([EntryType]) -> Void) {
+        completion(entries.values
             .filter { $0.text.contains(string) }
-            .sorted { $0.createdAt > $1.createdAt  }
+            .sorted { $0.createdAt > $1.createdAt  })
     }
     
-    func recentEntries(max: Int) -> [EntryType] {
+    func recentEntries(max: Int, page: Int, completion: @escaping ([EntryType], Bool) -> Void) {
+        var isLastPage = false;
         
         if max < 0 {
-            return [];
+            completion([], isLastPage)
         }
         
         let result = entries
@@ -66,7 +79,9 @@ class InMemoryEntryRepository: EntryRepository {
             .sorted { lhs, rhs in lhs.createdAt > rhs.createdAt }
             .prefix(max)
         
-        return Array(result)
+        isLastPage = result.count < max
+        
+        return completion(Array(result), isLastPage)
     }
 }
 
