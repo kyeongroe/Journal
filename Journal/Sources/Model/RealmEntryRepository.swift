@@ -10,6 +10,7 @@ import Foundation
 import RealmSwift
 
 class RealmEntryRepository: EntryRepository {
+    
     private let realm: Realm
     init(realm: Realm) {
         self.realm = realm
@@ -42,17 +43,18 @@ class RealmEntryRepository: EntryRepository {
             .first
     }
     
-    func entries(contains string: String) -> [EntryType] {
+    func entries(contains string: String, completion: @escaping ([EntryType]) -> Void) {
         let results = realm.objects(RealmEntry.self)
             .filter("text CONTAINS[c] '\(string)'")
             .sorted(byKeyPath: "createdAt", ascending: false)
-        return Array(results)
+        
+        completion(Array(results))
     }
     
-    func recentEntries(max: Int) -> [EntryType] {
-        let results = realm.objects(RealmEntry.self)
-            .sorted(byKeyPath: "createdAt", ascending: false)
-            .prefix(max)
-        return Array(results)
+    func recentEntries(max: Int, page: Int, completion: @escaping ([EntryType], Bool) -> Void) {
+//        let results = realm.objects(RealmEntry.self)
+//            .sorted(byKeyPath: "createdAt", ascending: false)
+//            .prefix(max)
+//        return Array(results)
     }
 }

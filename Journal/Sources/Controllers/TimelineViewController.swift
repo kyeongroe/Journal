@@ -11,6 +11,8 @@ import SnapKit
 
 class TimelineViewController: UIViewController {
     
+    private let loadingIndicator: UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     var tableview: UITableView!
@@ -54,19 +56,36 @@ class TimelineViewController: UIViewController {
         searchController.searchResultsUpdater = self
         
         definesPresentationContext = true
+        
+        view.addSubview(loadingIndicator)
+        loadingIndicator.snp.makeConstraints { $0.center.equalToSuperview() }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableview.reloadData()
+        loadingIndicator.startAnimating()
+        
+        viewModel.refreshEntries { [weak self] in
+            self?.tableview.reloadData()
+            self?.loadingIndicator.stopAnimating()
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if viewModel.isSearching {
-            viewModel.searchText = nil
+        if searchController.isActive {
+            viewModel.endSearching()
             searchController.isActive = false
+        }
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        self.viewModel.endSearching()
+        self.loadingIndicator.startAnimating()
+        viewModel.loadEntries { [weak self] in
+            self?.tableview.reloadData()
+            self?.loadingIndicator.stopAnimating()
         }
     }
     
@@ -98,13 +117,18 @@ class TimelineViewController: UIViewController {
 }
 
 extension TimelineViewController: UISearchResultsUpdating {
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard
             let searchText = searchController.searchBar.text,
-            searchText.isEmpty == false
+            searchText.isEmpty == false,
+            viewModel.isLoading == false
             else { return }
-        viewModel.searchText = searchText
-        tableview.reloadData()
+        self.loadingIndicator.startAnimating()
+        viewModel.searchText(text: searchText) { [weak self] in
+            self?.tableview.reloadData()
+            self?.loadingIndicator.stopAnimating()
+        }
     }
 }
 
@@ -141,6 +165,19 @@ extension TimelineViewController: UITableViewDataSource {
 }
 
 extension TimelineViewController: UITableViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollPosition: CGFloat = scrollView.contentOffset.y
+        let cellHeight: CGFloat = 80
+        let threshold: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height - cellHeight
+        guard scrollPosition > threshold && viewModel.isLoading == false && viewModel.isLastPage == false else { return }
+        loadingIndicator.startAnimating()
+        viewModel.loadMoreEntries { [weak self] in
+            self?.tableview.reloadData()
+            self?.loadingIndicator.stopAnimating()
+        }
+    }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         guard searchController.isActive == false
