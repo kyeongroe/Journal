@@ -21,6 +21,8 @@ class TimelineViewViewModel {
                 return
             }
             filteredEntries = environment.entryRepository.entries(contains: text)
+            
+            print(filteredEntries)
         }
     }
     
@@ -88,6 +90,7 @@ class TimelineViewViewModel {
         entryVM.delegate = self
         return entryVM
     }
+    
     func entryViewModel(for indexPath: IndexPath) -> EntryViewViewModel {
         let entryVM = EntryViewViewModel(environment: environment, entry: entry(for: indexPath))
         entryVM.delegate = self

@@ -19,7 +19,8 @@ extension UserDefaults: Settings {
         get {
             let rawValue = object(forKey: dateFormatOptionKey) as? String
             return rawValue.flatMap(DateFormatOption.init) ?? DateFormatOption.default
-        } }
+        }
+    }
     var fontSize: FontSizeOption {
         set {
             set(newValue.rawValue, forKey: fontSizeOptionKey)
@@ -28,5 +29,6 @@ extension UserDefaults: Settings {
         get {
             let rawValue = object(forKey: fontSizeOptionKey) as? CGFloat
             return rawValue.flatMap(FontSizeOption.init) ?? FontSizeOption.default
-        } }
+        }
+    }
 }

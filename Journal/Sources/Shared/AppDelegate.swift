@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 entry.createdAt = Date()
                 entry.text = text
                 return entry
-        },
+            },
             settings: UserDefaults.standard)
         
         print(Realm.Configuration.defaultConfiguration.fileURL!)
